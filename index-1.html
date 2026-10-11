@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prayer Times & Hijri Calendar</title>
+<meta name="theme-color" content="#0b4a38">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Salah">
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--tx:#1d2b25;--mu:#6b7a72;--ac:#1f7a5c;--ln:#e3e0d6;--hl:#e4f2ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1713;--card:#17231d;--tx:#e8efe9;--mu:#8fa398;--ac:#4cc79a;--ln:#26362e;--hl:#1d3329}}
+:root[data-theme="dark"]{--bg:#0f1713;--card:#17231d;--tx:#e8efe9;--mu:#8fa398;--ac:#4cc79a;--ln:#26362e;--hl:#1d3329}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:480px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:16px;margin-bottom:14px}
+.hijri{font-size:1.5rem;font-weight:700}.greg{color:var(--mu);font-size:.9rem;margin-top:2px}
+.next{font-size:.8rem;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+.nn{font-size:1.4rem;font-weight:700;color:var(--ac)}
+.row{display:flex;justify-content:space-between;padding:11px 8px;border-radius:10px;font-size:1.05rem}
+.row.on{background:var(--hl);color:var(--ac);font-weight:700}.row.past{opacity:.45}.row span:last-child{font-variant-numeric:tabular-nums}
+.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+button,select,input{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:8px 10px}
+button{cursor:pointer}
+.g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.dn{font-size:.7rem;color:var(--mu);padding:4px 0}
+.d{padding:6px 0;border-radius:10px;line-height:1.1}.d small{display:block;font-size:.68rem;color:var(--mu)}
+.d.t{background:var(--ac);color:#fff}.d.t small{color:#fff}
+label{display:block;font-size:.8rem;color:var(--mu);margin:10px 0 4px}
+.f{display:flex;gap:8px}.f>*{flex:1;min-width:0}
+.mu{color:var(--mu);font-size:.8rem;margin-top:8px}
+input,select{width:100%;max-width:100%;min-width:0}
+.card{overflow:hidden}
+.card>b{display:block;margin-bottom:6px}
+.card label{margin:12px 0 4px}
+#adj,#iqa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#adj>div,#iqa>div{min-width:0}
+#adj label,#iqa label{margin:0 0 4px!important}
+.f{align-items:flex-end}
+.hd button{width:40px;height:40px;padding:0;border-radius:12px}
+#times,#vol{padding:12px}
+.row{padding:10px 8px}
+.sg{display:flex;gap:6px}.sb{flex:none;width:40px;padding:0;font-size:1.2rem;font-weight:700;color:var(--ac)}
+.act{background:var(--ac);color:#fff;border-color:var(--ac)}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--ac);font-size:1.4rem;line-height:1}
+details[open]>summary::after{content:"\2212"}
+details[open]>summary{margin-bottom:10px}
+#vol{padding:0!important}
+table{border-collapse:collapse;width:100%;font-size:.78rem;font-variant-numeric:tabular-nums}
+th,td{padding:6px 4px;text-align:center;border-bottom:1px solid var(--ln);white-space:nowrap}
+th{color:var(--mu);font-weight:600}td:first-child{text-align:left;font-weight:600}td small{color:var(--mu);font-weight:400}
+tr.td{background:var(--hl);color:var(--ac)}
+@media print{body{background:#fff}main>*{display:none!important}main>#tt{display:block!important;border:0;box-shadow:none;color:#000}#tt .hd button,#tpr{display:none}}
+:root{--g1:#0b4a38;--g2:#1c8a64;--gold:#e8c25a}
+body{background:radial-gradient(700px 380px at 50% -90px,rgba(28,138,100,.24),transparent 70%),var(--bg);font-family:"Avenir Next",Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{padding:14px 14px 100px}
+.card{border-radius:22px;box-shadow:0 6px 22px rgba(8,50,36,.08)}
+main>.card:first-child{background:linear-gradient(160deg,var(--g1),#127050);color:#fff;border:0;border-radius:26px 26px 0 0;margin-bottom:0;padding:18px 18px 8px;position:relative;overflow:hidden;box-shadow:none}
+main>.card:first-child::after{content:"\1F54C";position:absolute;right:12px;bottom:-6px;font-size:4.8rem;opacity:.16}
+.pill{display:inline-block;background:rgba(255,255,255,.16);padding:5px 12px;border-radius:999px;font-size:.85rem;margin-bottom:10px}
+.hijri{font-size:1.3rem;font-weight:700}.greg{color:rgba(255,255,255,.75)}
+main>.card:nth-child(2){background:linear-gradient(160deg,#127050,var(--g2));color:#fff;border:0;border-radius:0 0 26px 26px;padding:6px 18px 22px;display:flex;flex-direction:column;position:relative}
+main>.card:nth-child(2)>div:not([class]){display:contents}
+main>.card:nth-child(2) .next{order:0;color:rgba(255,255,255,.7)}
+main>.card:nth-child(2) .nn{order:1;font-size:1.2rem;font-weight:700;color:var(--gold)}
+.bigt{order:2;font-size:3rem;font-weight:800;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}
+#dv{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px}
+#dv button{border:0;background:transparent;border-radius:999px;padding:8px}
+#dv .act{background:var(--ac);color:#fff}
+#times{padding:6px 10px}
+#times .row{align-items:center;justify-content:flex-start;padding:10px 8px;border-radius:16px;font-size:1.05rem}
+#times .row span:first-of-type{flex:1;font-weight:600}
+#times .row>span:nth-of-type(2){font-weight:700}
+#times .row.on{background:var(--hl);color:var(--ac);box-shadow:inset 0 0 0 1.5px var(--ac)}
+#nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--ln);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));z-index:10}
+#nav button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.72rem;color:var(--mu);padding:4px 0;border-radius:12px}
+#nav button i{font-style:normal;font-size:1.35rem}
+#nav button.on{color:var(--ac);font-weight:700}
+@property --h1{syntax:'<color>';inherits:true;initial-value:#0b4a38}
+@property --hm{syntax:'<color>';inherits:true;initial-value:#127050}
+@property --h2{syntax:'<color>';inherits:true;initial-value:#1c8a64}
+:root{--h1:#0b4a38;--hm:#127050;--h2:#1c8a64;transition:--h1 2s,--hm 2s,--h2 2s}
+main>.card:first-child{background:linear-gradient(160deg,var(--h1),var(--hm))}
+main>.card:nth-child(2){background:linear-gradient(160deg,var(--hm),var(--h2));display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:start}
+main>.card:nth-child(2) .next,main>.card:nth-child(2) .nn,main>.card:nth-child(2) .bigt{grid-column:1}
+main>.card:nth-child(2) .nn{color:#fff;opacity:.95}
+.bigt{font-size:2.8rem}
+.ring{grid-column:2;grid-row:1/4;align-self:center;position:relative;width:104px;height:104px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rb,.rf{fill:none;stroke-width:7}.rb{stroke:rgba(255,255,255,.2)}.rf{stroke:#fff;stroke-linecap:round;transition:stroke-dasharray .9s linear}
+.rt{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.rt b{font-size:1.05rem;color:#fff;font-variant-numeric:tabular-nums}.rt small{font-size:.66rem;color:rgba(255,255,255,.75)}
+.ic,.nic{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ic{width:38px;height:38px;padding:8px;border-radius:50%;background:var(--hl);color:var(--ac);flex:none;margin-inline-end:12px}
+.nic{width:26px;height:26px}
+#nav button i{font-size:0;display:block}
+button,summary{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+html,body{overscroll-behavior:none}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,select{-webkit-user-select:text;user-select:text}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-Fajr" viewBox="0 0 24 24"><path d="M19 13.5A7 7 0 1 1 9 4a5.5 5.5 0 0 0 10 9.5z M3 20h18"/></symbol>
+<symbol id="i-Sunrise" viewBox="0 0 24 24"><path d="M3 19h18 M7 19a5 5 0 0 1 10 0 M12 4v6 M9.5 6.5L12 4l2.5 2.5"/></symbol>
+<symbol id="i-Dhuhr" viewBox="0 0 24 24"><path d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z M12 2v2 M12 20v2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M2 12h2 M20 12h2 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-Asr" viewBox="0 0 24 24"><path d="M3 19h18 M7 19a5 5 0 0 1 10 0 M12 8v2 M5.5 12l1.5 1.2 M18.5 12l-1.5 1.2"/></symbol>
+<symbol id="i-Maghrib" viewBox="0 0 24 24"><path d="M3 19h18 M7 19a5 5 0 0 1 10 0 M12 4v6 M9.5 7.5L12 10l2.5-2.5"/></symbol>
+<symbol id="i-Isha" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z M17 3v3 M15.5 4.5h3"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8 M5 10v10h14V10 M10 20v-6h4v6"/></symbol>
+<symbol id="i-qibla" viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M16 8l-2 6-6 2 2-6z"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><path d="M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4"/></symbol>
+<symbol id="i-set" viewBox="0 0 24 24"><path d="M4 7h10 M18 7h2 M4 17h2 M10 17h10 M16 5v4 M8 15v4"/></symbol>
+</defs></svg>
+<main>
+ <div class="card">
+  <div class="pill" id="cp"></div>
+  <div class="hijri" id="hj">…</div><div class="greg" id="gr"></div>
+ </div>
+ <div class="card">
+  <div class="next">Next prayer</div>
+  <div class="bigt" id="nt"></div>
+  <div class="ring"><svg viewBox="0 0 100 100"><circle class="rb" cx="50" cy="50" r="44"/><circle class="rf" id="rf" cx="50" cy="50" r="44" stroke-dasharray="276.5 276.5"/></svg><div class="rt"><b id="rh"></b><small>left</small></div></div>
+  <div><span class="nn" id="nn">—</span></div>
+ </div>
+ <div class="f" id="dv" style="margin-bottom:10px"><button data-o="0" class="act">Today</button><button data-o="1">Tomorrow</button></div>
+ <div class="card" id="times"></div>
+ <details class="card" open><summary>Voluntary prayers</summary><div id="vol"></div></details>
+ <details class="card" open><summary>Fasting</summary><div id="fs"></div></details>
+ <details class="card" id="evd"><summary>Islamic events</summary><div id="ev"></div></details>
+ <details class="card" id="qb"><summary>Qibla</summary>
+  <div style="text-align:center">
+   <div style="position:relative;width:180px;height:180px;margin:10px auto;border:2px solid var(--ln);border-radius:50%">
+    <div id="arr" style="position:absolute;inset:0;transition:transform .2s"><div style="position:absolute;left:50%;top:6px;transform:translateX(-50%);font-size:1.6rem">🕋</div><div style="position:absolute;left:50%;top:42px;bottom:50%;width:3px;margin-left:-1.5px;background:var(--ac);border-radius:2px"></div></div>
+    <div style="position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--ac)"></div>
+   </div>
+   <div id="qd" style="font-weight:700"></div>
+   <div id="qh" class="mu"></div>
+   <button id="qc" type="button" style="margin-top:10px">Enable compass</button>
+  </div>
+ </details>
+ <details class="card"><summary>Hijri calendar</summary>
+  <div class="hd"><button id="pv" type="button" aria-label="Previous month">‹</button><b id="mt"></b><button id="nx" type="button" aria-label="Next month">›</button></div>
+  <div class="g" id="cal"></div>
+ </details>
+ <details class="card" id="tt"><summary>Monthly timetable</summary>
+  <div class="hd"><button id="tp" type="button" aria-label="Previous month">&lsaquo;</button><b id="ttm"></b><button id="tn" type="button" aria-label="Next month">&rsaquo;</button></div>
+  <div id="ttb" style="overflow-x:auto"></div>
+  <button id="tpr" type="button" style="margin-top:10px">Print</button>
+ </details>
+ <details class="card"><summary>Settings</summary>
+  <details class="adv"><summary style="font-weight:400;color:var(--mu);font-size:.85rem">Advanced: coordinates</summary><div class="f">
+   <div><label>Latitude</label><input id="lat" type="number" step="any" inputmode="decimal"></div>
+   <div><label>Longitude</label><input id="lng" type="number" step="any" inputmode="decimal"></div>
+  </div></details>
+  <label>City (type to search)</label><input id="city" list="cl" placeholder="e.g. London" style="width:100%" autocomplete="off"><datalist id="cl"></datalist>
+  <button id="loc" type="button" style="margin-top:8px;width:100%">Use my location</button><div class="mu" id="locs"></div>
+  <label>Calculation method</label>
+  <select id="me" style="width:100%">
+   <option value="MWL">Muslim World League</option>
+   <option value="Egypt">Egyptian General Authority</option>
+   <option value="Makkah">Umm al-Qura (Makkah)</option>
+   <option value="ISNA">ISNA (North America)</option>
+   <option value="Karachi">Karachi</option>
+  </select>
+  <div class="f">
+   <div><label>Asr</label><select id="as"><option value="1">Standard</option><option value="2">Hanafi</option></select></div>
+   <div><label>Clock</label><select id="fm"><option value="12">12-hour</option><option value="24">24-hour</option></select></div>
+  </div>
+  <label>Language</label>
+  <select id="lg"><option value="en">English</option><option value="so">Soomaali</option><option value="ar">العربية</option></select>
+  <label>Theme</label>
+  <select id="th"><option value="auto">Auto</option><option value="light">Light</option><option value="dark">Dark</option></select>
+  <label>Hijri date adjustment</label>
+  <select id="ha"><option value="-1">−1 day</option><option value="0">None</option><option value="1">+1 day</option></select>
+  <label>Fine-tune minutes (to match your local mosque)</label>
+  <div class="f" id="adj" style="flex-wrap:wrap"></div>
+  <label>Iqama: minutes after adhan (0 = hide)</label>
+  <div class="f" id="iqa" style="flex-wrap:wrap"></div>
+ </details>
+<nav id="nav"><button data-t="home" class="on"><i>🏠</i><span>Home</span></button><button data-t="qibla"><i>🧭</i><span>Qibla</span></button><button data-t="cal"><i>📅</i><span>Calendar</span></button><button data-t="set"><i>⚙️</i><span>Settings</span></button></nav>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const S={city:'Borama (Awdal)',lat:9.9361,lng:43.1828,me:'MWL',as:1,fm:'12'};
+try{Object.assign(S,JSON.parse(localStorage.getItem('pt')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('pt',JSON.stringify(S))}catch(e){}};
+const M={MWL:[18,17],ISNA:[15,15],Egypt:[19.5,17.5],Makkah:[18.5,'90'],Karachi:[18,18]};
+const R=Math.PI/180,sin=x=>Math.sin(x*R),cos=x=>Math.cos(x*R),tan=x=>Math.tan(x*R);
+const asin=x=>Math.asin(x)/R,acos=x=>Math.acos(x)/R,acot=x=>Math.atan(1/x)/R,atan2=(y,x)=>Math.atan2(y,x)/R;
+const fa=a=>((a%360)+360)%360,fh=h=>((h%24)+24)%24;
+function sun(jd){const D=jd-2451545,g=fa(357.529+.98560028*D),q=fa(280.459+.98564736*D),
+L=fa(q+1.915*sin(g)+.02*sin(2*g)),e=23.439-3.6e-7*D,RA=fh(atan2(cos(e)*sin(L),cos(L))/15);
+return{d:asin(sin(e)*sin(L)),eq:q/15-RA}}
+function calc(date){
+ const{lat,lng}=S,[fj,ish]=M[S.me],tz=-date.getTimezoneOffset()/60;
+ const jd0=Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/864e5+2440587.5-lng/360;
+ const noon=t=>fh(12-sun(jd0+t).eq);
+ const ang=(a,t,ccw)=>{const s=sun(jd0+t),v=acos((-sin(a)-sin(s.d)*sin(lat))/(cos(s.d)*cos(lat)))/15;
+  return noon(t)+(ccw?-v:v)};
+ const asr=(t)=>{const s=sun(jd0+t);return ang(-acot(S.as+tan(Math.abs(lat-s.d))),t)};
+ const adj=h=>h+tz-lng/15;
+ const mg=adj(ang(.833,18/24));
+ const T={Fajr:adj(ang(fj,5/24,1)),Sunrise:adj(ang(.833,6/24,1)),Dhuhr:adj(noon(.5))+1/60,
+  Asr:adj(asr(15/24)),Maghrib:mg,Isha:ish==='90'?mg+(hp(addDays(date,1)).month===9?2:1.5):adj(ang(ish,18/24))};
+ const nl=fh(T.Sunrise-T.Maghrib),lim=a=>a/60*nl;
+ {const d=fh(T.Sunrise-T.Fajr);if(isNaN(d)||d>lim(fj))T.Fajr=T.Sunrise-lim(fj)}
+ if(ish!=='90'){const d=fh(T.Isha-T.Maghrib);if(isNaN(d)||d>lim(ish))T.Isha=T.Maghrib+lim(ish)}
+ return T}
+const toDate=(base,h)=>isNaN(h)?null:new Date(new Date(base.getFullYear(),base.getMonth(),base.getDate()).getTime()+Math.round(h*3600)*1000);
+const fmt=d=>{if(!d)return'—';let h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');
+ if(S.fm==='24')return String(h).padStart(2,'0')+':'+m;const p=h<12?'AM':'PM';h=h%12||12;return h+':'+m+' '+p};
+const HM=['Muharram','Safar','Rabiʻ I','Rabiʻ II','Jumada I','Jumada II','Rajab','Shaʻban','Ramadan','Shawwal','Dhu al-Qiʻdah','Dhu al-Hijjah'];
+const hf=new Intl.DateTimeFormat('en-u-ca-islamic-umalqura',{day:'numeric',month:'numeric',year:'numeric'});
+const hp=d=>{const o={};hf.formatToParts(S.ha?addDays(d,S.ha):d).forEach(p=>o[p.type]=parseInt(p.value));return o};
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n,12);
+let anchor=new Date(),hOff=0;
+let lastDay='';
+function render(){
+ const now=new Date(),T=calc(now),names=Object.keys(T);
+ const ad=n=>((S.adj&&S.adj[n])||0)/60;
+  const iqS=(n,i)=>{const m=(S.iq&&S.iq[n])||0;if(!m||!ds[i])return'';const q=new Date(ds[i].getTime()+m*6e4);const w=ds[i]<=now&&now<q?` · in ${Math.ceil((q-now)/6e4)} min`:'';return `<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">Iqama ${fmt(q)}${w}</small>`};
+ const ds=names.map(n=>toDate(now,T[n]+ad(n)));
+ hOff=ds[4]&&now>=ds[4]?1:0;
+ const ni=ds.findIndex(d=>d&&d>now);
+ let nextName,nextDate;
+ if(ni<0){const tm=calc(addDays(now,1));nextName='Fajr';nextDate=toDate(addDays(now,1),tm.Fajr+ad('Fajr'))}else{nextName=names[ni];nextDate=ds[ni]}
+ let ci=-1;ds.forEach((d,i)=>{if(d&&d<=now&&names[i]!=='Sunrise')ci=i});
+ $('times').innerHTML=names.map((n,i)=>`<div class="row${i===ci?' on':''}${ds[i]&&ds[i]<=now&&i!==ci?' past':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${n}${i===ci?' · now':''}</span><span>${fmt(ds[i])}${iqS(n,i)}</span></div>`).join('');
+ $('nn').textContent=nextName;
+ if(ds[0]&&ds[1]&&ds[2]&&ds[4]){
+  const dayF=(k,x)=>{const b=addDays(now,k);return toDate(b,calc(b)[x]+ad(x))};
+  let ns,ne;if(now<ds[0]){ns=dayF(-1,'Maghrib');ne=ds[0]}else{ns=ds[4];ne=dayF(1,'Fajr')}
+  if(ns&&ne){
+   const nt=ne-ns,mid=new Date(ns.getTime()+nt/2),third=new Date(ns.getTime()+nt*2/3);
+   const d1=new Date(ds[1].getTime()+15*6e4),d2=new Date(ds[2].getTime()-10*6e4);
+   const on=(a,b)=>now>=a&&now<b?' on':'';
+   $('vol').innerHTML=
+    `<div class="row${on(d1,d2)}"><span>Duha</span><span>${fmt(d1)} – ${fmt(d2)}</span></div>`+
+    `<div class="row${on(third,ne)}"><span>Salatul Layl</span><span>${fmt(third)} – ${fmt(ne)}</span></div>`+
+    `<div class="row"><span>Islamic midnight</span><span>${fmt(mid)}</span></div>`}}
+ if(view===1){const b=addDays(now,1),T1=calc(b);$('times').innerHTML=names.map((n,i)=>{const t=toDate(b,T1[n]+ad(n)),t0=ds[i],df=t&&t0?((t.getHours()*60+t.getMinutes()-t0.getHours()*60-t0.getMinutes()+2160)%1440)-720:0;return `<div class="row"><svg class="ic"><use href="#i-${n}"/></svg><span>${n}</span><span>${fmt(t)}<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">${df>0?'+':df<0?'\u2212':''}${Math.abs(df)} min vs today</small></span></div>`}).join('')}
+ {const eff=addDays(now,hOff),hj=hp(eff),hs=hj,wd=eff.getDay(),k=eff.toDateString();
+  if(evK!==k){evK=k;evC=scanEv(eff)}
+  const dl=i=>i===0?'today':i===1?'tomorrow':'in '+i+' days';
+  const rm=evC.out.find(e=>e.n==='Ramadan begins');
+  if(evA!==k){evA=k;if(hj.month===9||(rm&&rm.i<=30)||evC.out.some(e=>e.i<=3&&e.n!=='Ramadan begins'))$('evd').open=true}
+  $('ev').innerHTML=
+   (hs.month===9?`<div class="row on"><span>Ramadan</span><span>Day ${hs.day}</span></div>`:rm?`<div class="row on"><span>Ramadan begins</span><span>${dl(rm.i)}</span></div>`:'')+
+   evC.out.filter(e=>e.n!=='Ramadan begins').slice(0,4).map(e=>`<div class="row"><span>${e.n}</span><span>${e.d.toLocaleDateString(undefined,{day:'numeric',month:'short'})}<small style="${SM}">${dl(e.i)}</small></span></div>`).join('');
+  if(ds[0]&&ds[4]){
+   const tm=addDays(now,1),nf=toDate(tm,calc(tm).Fajr+ad('Fajr'));
+   const inF=now>=ds[0]&&now<ds[4];
+   const st=now<ds[0]?'Suhoor ends in '+hm(ds[0]-now):inF?'Iftar in '+hm(ds[4]-now):'Next Suhoor ends '+fmt(nf);
+   const tg=[];
+   if(hj.month===9)tg.push('Ramadan fast');
+   if((hj.month===10&&hj.day===1)||(hj.month===12&&hj.day>=10&&hj.day<=13))tg.push('No fasting today (Eid days)');
+   else{if(wd===1||wd===4)tg.push((wd===1?'Monday':'Thursday')+' sunnah');
+    if(hj.day>=13&&hj.day<=15&&hj.month!==9)tg.push('White day');
+    if(hj.month===1&&hj.day===10)tg.push('Ashura');
+    if(hj.month===12&&hj.day===9)tg.push('Day of Arafah')}
+   const wn=evC.white>0&&!(hj.day>=13&&hj.day<=15)&&hj.month!==9?' · White days begin '+dl(evC.white):'';
+   $('fs').innerHTML=
+    `<div class="row"><span>Suhoor ends (Fajr)</span><span>${fmt(ds[0])}</span></div>`+
+    `<div class="row"><span>Iftar (Maghrib)</span><span>${fmt(ds[4])}</span></div>`+
+    `<div class="row${inF?' on':''}"><span>${st}</span></div>`+
+    `<div class="mu">Today: ${tg.join(' · ')||'no special fast day'}${wn}</div>`}
+ }
+ {const sg=JSON.stringify([S.lat,S.lng,S.me,S.as,S.fm,S.adj,S.ha,now.toDateString()+hOff]);if(sg!==ttSig){ttSig=sg;ttDirty=true;if(curTab==='cal')renderTT()}}
+ $('cp').textContent=S.city?'📍 '+S.city:'';
+ $('nt').textContent=nextDate?fmt(nextDate):'';
+ {const pv=(ni<0?ds[5]:ds.filter(d=>d&&d<=now).pop())||toDate(addDays(now,-1),calc(addDays(now,-1)).Isha+ad('Isha'));
+  const fr=nextDate&&pv?Math.min(1,Math.max(0,(now-pv)/(nextDate-pv))):0;
+  $('rf').setAttribute('stroke-dasharray',((1-fr)*276.46).toFixed(1)+' 276.46');
+  $('rh').textContent=nextDate?hm(Math.max(0,nextDate-now)):'';
+  nextAtMs=nextDate?nextDate.getTime():0;
+  const P={night:['#0c1a3c','#13265a','#22397a'],fajr:['#26256a','#3c3f8f','#6a6fc0'],morning:['#0b4a38','#127050','#1c8a64'],noon:['#0b5f7a','#12829a','#27a5b5'],asr:['#8a5a12','#b97a1c','#e0a63a'],sunset:['#7a2f1c','#b3472a','#e0803a']};
+  const ph=!ds[0]||!ds[5]?'morning':now<ds[0]?'night':now<ds[1]?'fajr':now<ds[2]?'morning':now<ds[3]?'noon':now<ds[4]?'asr':now<ds[5]?'sunset':'night';
+  if(ph!==curPh){curPh=ph;const rs=document.documentElement.style;rs.setProperty('--h1',P[ph][0]);rs.setProperty('--hm',P[ph][1]);rs.setProperty('--h2',P[ph][2]);const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=P[ph][0]}}
+ qUpd();
+  // hijri date (advances after Maghrib)
+ const hh=hp(addDays(now,hOff));
+ $('hj').textContent=`${hh.day} ${HM[hh.month-1]} ${hh.year} AH`;
+ const dk=now.toDateString()+hOff;if(dk!==lastDay){lastDay=dk;anchor=addDays(now,hOff);renderCal()}
+ $('gr').textContent=addDays(now,hOff).toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function renderCal(){
+ const h=hp(anchor),start=addDays(anchor,-(h.day-1)),days=[];
+ for(let i=0;i<31;i++){const d=addDays(start,i);if(hp(d).month!==h.month)break;days.push(d)}
+ $('mt').textContent=`${HM[h.month-1]} ${h.year}`;
+ const today=addDays(new Date(),hOff),tk=today.toDateString();
+ let html=['Sa','Su','Mo','Tu','We','Th','Fr'].map(x=>`<div class="dn">${x}</div>`).join('');
+ html+='<div></div>'.repeat((days[0].getDay()+1)%7);
+ html+=days.map((d,i)=>`<div class="d${d.toDateString()===tk?' t':''}">${i+1}<small>${d.getDate()}</small></div>`).join('');
+ $('cal').innerHTML=html}
+$('pv').onclick=()=>{const h=hp(anchor);anchor=addDays(anchor,-h.day);renderCal()};
+$('nx').onclick=()=>{const h=hp(anchor);anchor=addDays(anchor,31-h.day);renderCal()};
+function load(){$('city').value=S.city||'';$('lat').value=S.lat;$('lng').value=S.lng;$('me').value=S.me;$('as').value=S.as;$('fm').value=S.fm;$('ha').value=String(S.ha||0)}
+function upd(){const a=parseFloat($('lat').value),b=parseFloat($('lng').value);
+ if(!isNaN(a)&&!isNaN(b)&&Math.abs(a)<=90&&Math.abs(b)<=180){S.lat=a;S.lng=b}
+ S.me=$('me').value;S.as=+$('as').value;S.fm=$('fm').value;save();render()}
+['lat','lng','me','as','fm'].forEach(i=>$(i).addEventListener('change',upd));
+const CT=('Borama (Awdal),9.9361,43.1828;Zeila (Awdal),11.3547,43.4744;Baki (Awdal),10.4,43.3;Hargeisa,9.56,44.065;Berbera,10.4396,45.0143;Burao,9.5221,45.5336;Djibouti,11.5721,43.1456;Makkah,21.4225,39.8262;Madinah,24.4686,39.6142;Riyadh,24.7136,46.6753;Jeddah,21.4858,39.1925;Dubai,25.2048,55.2708;Abu Dhabi,24.4539,54.3773;Doha,25.2854,51.531;Kuwait City,29.3759,47.9774;Manama,26.2285,50.586;Muscat,23.588,58.3829;Sanaa,15.3694,44.191;Baghdad,33.3152,44.3661;Amman,31.9454,35.9284;Jerusalem,31.7683,35.2137;Gaza,31.5017,34.4668;Beirut,33.8938,35.5018;Damascus,33.5138,36.2765;Istanbul,41.0082,28.9784;Ankara,39.9334,32.8597;Tehran,35.6892,51.389;Cairo,30.0444,31.2357;Alexandria,31.2001,29.9187;Khartoum,15.5007,32.5599;Tripoli,32.8872,13.1913;Tunis,36.8065,10.1815;Algiers,36.7538,3.0588;Casablanca,33.5731,-7.5898;Rabat,34.0209,-6.8416;Nouakchott,18.0735,-15.9582;Dakar,14.7167,-17.4677;Lagos,6.5244,3.3792;Abuja,9.0765,7.3986;Kano,12.0022,8.592;Accra,5.6037,-0.187;Addis Ababa,9.03,38.74;Mogadishu,2.0469,45.3182;Nairobi,-1.2921,36.8219;Dar es Salaam,-6.7924,39.2083;Johannesburg,-26.2041,28.0473;Cape Town,-33.9249,18.4241;Karachi,24.8607,67.0011;Lahore,31.5204,74.3587;Islamabad,33.6844,73.0479;Delhi,28.6139,77.209;Mumbai,19.076,72.8777;Hyderabad,17.385,78.4867;Dhaka,23.8103,90.4125;Kabul,34.5553,69.2075;Tashkent,41.2995,69.2401;Baku,40.4093,49.8671;Kuala Lumpur,3.139,101.6869;Singapore,1.3521,103.8198;Jakarta,-6.2088,106.8456;Manila,14.5995,120.9842;Bangkok,13.7563,100.5018;Beijing,39.9042,116.4074;Tokyo,35.6762,139.6503;Sydney,-33.8688,151.2093;Melbourne,-37.8136,144.9631;London,51.5072,-0.1276;Birmingham,52.4862,-1.8904;Manchester,53.4808,-2.2426;Dublin,53.3498,-6.2603;Paris,48.8566,2.3522;Marseille,43.2965,5.3698;Brussels,50.8503,4.3517;Amsterdam,52.3676,4.9041;Berlin,52.52,13.405;Frankfurt,50.1109,8.6821;Madrid,40.4168,-3.7038;Rome,41.9028,12.4964;Vienna,48.2082,16.3738;Stockholm,59.3293,18.0686;Oslo,59.9139,10.7522;Copenhagen,55.6761,12.5683;Sarajevo,43.8563,18.4131;Moscow,55.7558,37.6173;New York,40.7128,-74.006;Washington DC,38.9072,-77.0369;Chicago,41.8781,-87.6298;Houston,29.7604,-95.3698;Dallas,32.7767,-96.797;Los Angeles,34.0522,-118.2437;San Francisco,37.7749,-122.4194;Detroit,42.3314,-83.0458;Toronto,43.6532,-79.3832;Montreal,45.5019,-73.5674;Vancouver,49.2827,-123.1207;Mexico City,19.4326,-99.1332;Sao Paulo,-23.5505,-46.6333').split(';').map(s=>{const p=s.split(',');return{n:p[0],a:+p[1],b:+p[2]}});
+$('cl').innerHTML=CT.map(c=>`<option value="${c.n}">`).join('');
+$('city').addEventListener('change',()=>{const c=CT.find(x=>x.n.toLowerCase()===$('city').value.trim().toLowerCase());
+ if(c){S.city=c.n;S.lat=c.a;S.lng=c.b;$('city').value=c.n;$('lat').value=c.a;$('lng').value=c.b;save();render()}});
+{const hav=(a,b,c,d)=>12742*Math.asin(Math.sqrt(sin((c-a)/2)**2+cos(a)*cos(c)*sin((d-b)/2)**2));
+ if(!navigator.geolocation)$('loc').style.display='none';
+ else $('loc').onclick=()=>{const st=$('locs');st.textContent='Locating…';tx();
+  navigator.geolocation.getCurrentPosition(p=>{
+   const a=+p.coords.latitude.toFixed(4),b=+p.coords.longitude.toFixed(4);let best=null,bd=1e9;
+   CT.forEach(c=>{const d=hav(a,b,c.a,c.b);if(d<bd){bd=d;best=c}});
+   S.lat=a;S.lng=b;S.city=bd<=50?best.n:'My location';
+   $('city').value=S.city;$('lat').value=a;$('lng').value=b;st.textContent='';save();render()},
+  e=>{st.textContent=e.code===1?'Location permission was denied.':'Could not get your location.';tx()},
+  {timeout:15000,maximumAge:60000})}}
+S.adj=S.adj||{};
+S.iq=S.iq||{Fajr:20,Dhuhr:15,Asr:15,Maghrib:5,Isha:15};
+$('iqa').innerHTML=['Fajr','Dhuhr','Asr','Maghrib','Isha'].map(n=>`<div style="flex:1 1 30%"><label style="margin:4px 0 2px">${n}</label><input type="number" min="0" step="1" inputmode="numeric" data-n="${n}" value="${S.iq[n]||0}"></div>`).join('');
+$('iqa').addEventListener('change',e=>{const n=e.target.dataset.n;if(n){S.iq[n]=Math.max(0,parseInt(e.target.value)||0);save();render()}});
+$('adj').innerHTML=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].map(n=>`<div style="flex:1 1 30%"><label style="margin:4px 0 2px">${n}</label><div class="sg"><button type="button" class="sb" data-n="${n}" data-neg="${(S.adj[n]||0)<0?1:0}">${(S.adj[n]||0)<0?'−':'+'}</button><input type="number" min="0" step="1" inputmode="numeric" data-n="${n}" value="${Math.abs(S.adj[n]||0)}"></div></div>`).join('');
+const upA=n=>{const b=$('adj').querySelector('.sb[data-n="'+n+'"]'),i=$('adj').querySelector('input[data-n="'+n+'"]');S.adj[n]=(b.dataset.neg==='1'?-1:1)*Math.abs(parseInt(i.value)||0);save();render()};
+$('adj').addEventListener('click',e=>{const b=e.target.closest('.sb');if(!b)return;b.dataset.neg=b.dataset.neg==='1'?'0':'1';b.textContent=b.dataset.neg==='1'?'−':'+';upA(b.dataset.n)});
+$('adj').addEventListener('change',e=>{if(e.target.tagName==='INPUT')upA(e.target.dataset.n)});
+const SM='display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75';
+const hm=ms=>Math.floor(ms/36e5)+'h '+String(Math.floor(ms%36e5/6e4)).padStart(2,'0')+'m';
+const EV=[[1,1,'Islamic New Year'],[1,10,'Day of Ashura'],[9,1,'Ramadan begins'],[10,1,'Eid al-Fitr'],[12,9,'Day of Arafah'],[12,10,'Eid al-Adha']];
+let evK='',evC=null,evA='';
+function scanEv(td){const out=[],got={};let white=null;
+ const tn=new Date(td.getFullYear(),td.getMonth(),td.getDate(),12),h0=hp(td);let s=addDays(tn,-(h0.day-1));
+ for(let k=0;k<14;k++){const m=(h0.month-1+k)%12+1;
+  const at=D=>{const d=addDays(s,D-1);return{d:d,i:Math.round((d-tn)/864e5)}};
+  EV.forEach((e,j)=>{if(!got[j]&&e[0]===m){const x=at(e[1]);if(x.i>=0){got[j]=1;out.push({n:e[2],d:x.d,i:x.i})}}});
+  if(white===null){const x=at(13);if(x.i>=0)white=x.i}
+  let s2=addDays(s,29);if(hp(s2).day!==1)s2=addDays(s,30);s=s2}
+ out.sort((a,b)=>a.i-b.i);return{out,white}}
+let view=0,hd=null;
+const TB=[['left','haray','متبقي'],['Home','Guriga','الرئيسية'],['Calendar','Kalandarka','التقويم'],['Next prayer','Salaadda xigta','الصلاة القادمة'],['Today','Maanta','اليوم'],['Tomorrow','Berri','غدًا'],['today','maanta','اليوم'],['tomorrow','berri','غدًا'],
+['Fajr','Subax','الفجر'],['Sunrise','Qorrax-soo-bax','الشروق'],['Dhuhr','Duhur','الظهر'],['Asr','Casar','العصر'],['Maghrib','Maqrib','المغرب'],['Isha','Cishe','العشاء'],
+[' · now',' · hadda',' · الآن'],[' AM',' AM',' ص'],[' PM',' PM',' م'],
+['Voluntary prayers','Salaadaha Sunnada','صلوات النوافل'],['Duha','Duxo','الضحى'],['Salatul Layl','Salaadda Habeenka','قيام الليل'],['Islamic midnight','Badhtamaha habeenka','منتصف الليل'],
+['Fasting','Soonka','الصيام'],['Suhoor ends (Fajr)','Suxuurka wuu dhamaadaa (Subax)','نهاية السحور (الفجر)'],['Iftar (Maghrib)','Iftaarka (Maqrib)','الإفطار (المغرب)'],['Suhoor ends in ','Suxuurku wuu dhamaanayaa: ','ينتهي السحور بعد '],['Iftar in ','Iftaarka: ','الإفطار بعد '],['Next Suhoor ends ','Suxuurka xiga wuu dhamaanayaa ','ينتهي السحور القادم '],
+['Ramadan fast','Soonka Ramadaanka','صيام رمضان'],['No fasting today (Eid days)','Maanta ma soomi karto (maalmaha Ciidda)','لا صيام اليوم (أيام العيد)'],['Monday sunnah','Isniinta sunno','الاثنين سنة'],['Thursday sunnah','Khamiista sunno','الخميس سنة'],['White days begin','Maalmaha Cadcad way bilaabmayaan','تبدأ الأيام البيض'],['White day','Maalin Cad','يوم أبيض'],['no special fast day','maalin soon gaar ah ma aha','لا صيام مخصوص'],['Ashura','Caashuuraa','عاشوراء'],
+['Islamic events','Munaasabadaha Islaamka','المناسبات الإسلامية'],['Ramadan begins','Ramadaanku wuu bilaabmayaa','بداية رمضان'],['Islamic New Year','Sannad cusub oo Islaami ah','رأس السنة الهجرية'],['Day of Ashura','Maalinta Caashuuraa','يوم عاشوراء'],['Eid al-Fitr','Ciidul Fitr','عيد الفطر'],['Day of Arafah','Maalinta Carafo','يوم عرفة'],['Eid al-Adha','Ciidul Adxaa','عيد الأضحى'],['Day ','Maalin ','اليوم '],
+['Qibla','Qiblada','القبلة'],[' from north',' waqooyiga ka eeg',' من الشمال'],['Enable compass','Hawlgali kombaska','تفعيل البوصلة'],['Turn until the Kaaba icon points straight up.','Wareeji ilaa astaanta Kacbada ay toos kor u fiirto.','أدر الهاتف حتى تشير أيقونة الكعبة إلى الأعلى.'],['Showing the direction from north. Enable the compass to point your phone.','Waxaa la muujinayaa jihada waqooyiga laga eego. Hawlgali kombaska.','يتم عرض الاتجاه من الشمال. فعّل البوصلة.'],
+['Hijri calendar','Kalandarka Hijriga','التقويم الهجري'],['Monthly timetable','Jadwalka bishii','جدول الشهر'],['Print','Daabac','طباعة'],[' min vs today',' daq. vs maanta',' د مقارنة باليوم'],
+['Settings','Dejinta','الإعدادات'],['Language','Luqadda','اللغة'],['Theme','Muuqaalka','المظهر'],['Auto','Toos','تلقائي'],['Use my location','Isticmaal goobtayda','استخدم موقعي'],['My location','Goobtayda','موقعي'],['Locating…','Waa la helayaa…','جارٍ تحديد الموقع…'],['Location permission was denied.','Oggolaanshaha goobta waa la diiday.','تم رفض إذن الموقع.'],['Could not get your location.','Goobtaada lama helin.','تعذر تحديد موقعك.'],['Hijri date adjustment','Hagaajinta taariikhda Hijriga','ضبط التاريخ الهجري'],['−1 day','−1 maalin','−1 يوم'],['+1 day','+1 maalin','+1 يوم'],['None','Midna','بدون'],['Light','Iftiin','فاتح'],['Dark','Mugdi','داكن'],['City (type to search)','Magaalada (qor si aad u raadiso)','المدينة (اكتب للبحث)'],['Advanced: coordinates','Dheeraad: isku-duwayaasha goobta','متقدم: الإحداثيات'],['Latitude','Khadka Ballac','خط العرض'],['Longitude','Khadka Dherer','خط الطول'],['Calculation method','Habka xisaabinta','طريقة الحساب'],['Standard','Caadi','الجمهور'],['Hanafi','Xanafi','الحنفي'],['Clock','Saacadda','الساعة'],['12-hour','12 saac','12 ساعة'],['24-hour','24 saac','24 ساعة'],
+['Fine-tune minutes (to match your local mosque)','Hagaajin daqiiqado (si ay ula jaan qaado masjidkaaga)','ضبط الدقائق (لمطابقة مسجدك المحلي)'],['Iqama: minutes after adhan (0 = hide)','Iqaamada: daqiiqooyin ka dib Aadaanka (0 = qari)','الإقامة: دقائق بعد الأذان (0 = إخفاء)'],['Iqama ','Iqaamo ','الإقامة '],
+['Muslim World League','Rabitaanka Muslimiinta Adduunka','رابطة العالم الإسلامي'],['Umm al-Qura (Makkah)','Umm al-Qura (Makka)','أم القرى (مكة)'],['ISNA (North America)','ISNA (Waqooyiga Ameerika)','ISNA (أمريكا الشمالية)'],['Karachi','Karaachi','كراتشي'],
+['Muharram','Muxarram','محرم'],['Safar','Safar','صفر'],['Rabiʻ II','Rabiicul Aakhir','ربيع الآخر'],['Rabiʻ I','Rabiicul Awal','ربيع الأول'],['Jumada II','Jumaadal Aakhirah','جمادى الآخرة'],['Jumada I','Jumaadal Awal','جمادى الأولى'],['Rajab','Rajab','رجب'],['Shaʻban','Shacbaan','شعبان'],['Ramadan','Ramadaan','رمضان'],['Shawwal','Shawaal','شوال'],['Dhu al-Qiʻdah','Dhul Qacdo','ذو القعدة'],['Dhu al-Hijjah','Dhul Xijjo','ذو الحجة'],['AH','AH','هـ']];
+const RX=[[/in (\d+) days/g,'$1 maalmood gudahood','بعد $1 يوم'],[/· in (\d+) min/g,'· $1 daq gudahood','· بعد $1 دقيقة']];
+const XX={so:{Su:'Axd',Mo:'Isn',Tu:'Tal',We:'Arb',Th:'Kha',Fr:'Jim',Sa:'Sab',Date:'Taariikh'},ar:{Su:'ح',Mo:'ن',Tu:'ث',We:'ر',Th:'خ',Fr:'ج',Sa:'س',Date:'التاريخ'}};
+const LI={so:1,ar:2},LCs={en:undefined,so:'so',ar:'ar-u-nu-latn'},SRT={};
+const _tl=Date.prototype.toLocaleDateString;Date.prototype.toLocaleDateString=function(l,o){return _tl.call(this,LCs[S.lg||'en'],o)};
+const CC={};
+function conv(s,lg){const ck=lg+'|'+s;if(ck in CC)return CC[ck];const o=conv0(s,lg);CC[ck]=o;return o}
+function conv0(s,lg){const t=s.trim(),x=XX[lg][t];if(x)return s.replace(t,x);const i=LI[lg];
+ const tb=SRT[lg]||(SRT[lg]=TB.map(r=>[r[0],r[i]]).sort((a,b)=>b[0].length-a[0].length));
+ RX.forEach(r=>{s=s.replace(r[0],r[i])});
+ tb.forEach(r=>{if(s.indexOf(r[0])>=0)s=s.split(r[0]).join(r[1])});return s}
+function tx(){const lg=S.lg||'en',w=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){const s=n.nodeValue;if(!s.trim())continue;const src=(n._t!==undefined&&s===n._t)?n._o:s;const out=lg==='en'?src:conv(src,lg);if(out!==s)n.nodeValue=out;n._o=src;n._t=out}}
+function applyLg(){const lg=S.lg||'en';document.documentElement.lang=lg;document.documentElement.dir=lg==='ar'?'rtl':'ltr';tx()}
+$('lg').value=S.lg||'en';
+$('lg').addEventListener('change',()=>{S.lg=$('lg').value;save();applyLg();render();renderCal();renderTT();tx()});
+let ttSig='',ttDirty=true,curTab='home',tmo=new Date();tmo=new Date(tmo.getFullYear(),tmo.getMonth(),1,12);
+const ft=d=>{if(!d)return'—';const h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');return S.fm==='24'?String(h).padStart(2,'0')+':'+m:(h%12||12)+':'+m};
+function renderTT(){ttDirty=false;const y=tmo.getFullYear(),m=tmo.getMonth(),n=new Date(y,m+1,0).getDate(),nm=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'],td=addDays(new Date(),hOff).toDateString();
+ let h='<table><tr><th>Date</th>'+nm.map(x=>`<th>${x}</th>`).join('')+'</tr>';
+ for(let i=1;i<=n;i++){const d=new Date(y,m,i,12),T=calc(d);
+  h+=`<tr${d.toDateString()===td?' class="td"':''}><td>${d.toLocaleDateString(undefined,{weekday:'short'})} ${i} <small>${hp(d).day}</small></td>`+nm.map(x=>`<td>${ft(toDate(d,T[x]+((S.adj&&S.adj[x])||0)/60))}</td>`).join('')+'</tr>'}
+ $('ttb').innerHTML=h+'</table>';$('ttm').textContent=tmo.toLocaleDateString(undefined,{month:'long',year:'numeric'})}
+$('tp').onclick=()=>{tmo=new Date(tmo.getFullYear(),tmo.getMonth()-1,1,12);renderTT()};
+$('tn').onclick=()=>{tmo=new Date(tmo.getFullYear(),tmo.getMonth()+1,1,12);renderTT()};
+$('tpr').onclick=()=>{try{window.print()}catch(e){}};
+function qUpd(){const q=fa(atan2(sin(39.8262-S.lng)*cos(21.4225),cos(S.lat)*sin(21.4225)-sin(S.lat)*cos(21.4225)*cos(39.8262-S.lng)));
+ $('qd').textContent=Math.round(q)+'\u00b0 '+['N','NE','E','SE','S','SW','W','NW'][Math.round(q/45)%8]+' from north';
+ $('arr').style.transform='rotate('+(hd===null?q:q-hd)+'deg)';
+ if(hd!==null)$('qh').textContent='Turn until the Kaaba icon points straight up.';else if(!$('qh').textContent)$('qh').textContent='Showing the direction from north. Enable the compass to point your phone.'}
+$('qc').onclick=async()=>{try{if(typeof DeviceOrientationEvent!=='undefined'&&DeviceOrientationEvent.requestPermission){const r=await DeviceOrientationEvent.requestPermission();if(r!=='granted'){$('qh').textContent='Compass permission was denied.';return}}
+ const h=e=>{let v=e.webkitCompassHeading;if(v==null&&e.alpha!=null&&(e.absolute||e.type==='deviceorientationabsolute'))v=360-e.alpha;if(v!=null){hd=v;qUpd()}};
+ addEventListener('deviceorientationabsolute',h,true);addEventListener('deviceorientation',h,true);
+ $('qc').style.display='none';setTimeout(()=>{if(hd===null)$('qh').textContent='No compass data. Open this page directly in your phone browser, not in a preview.'},2500)}catch(x){$('qh').textContent='Compass is not available here.'}};
+$('dv').addEventListener('click',e=>{const o=e.target.dataset.o;if(o==null)return;view=+o;[...$('dv').children].forEach(b=>b.classList.toggle('act',b.dataset.o===o));render()});
+const applyTh=()=>{if(S.th&&S.th!=='auto')document.documentElement.dataset.theme=S.th;else delete document.documentElement.dataset.theme};
+$('th').value=S.th||'auto';applyTh();$('th').addEventListener('change',()=>{S.th=$('th').value;save();applyTh()});
+if(!M[S.me])S.me='MWL';
+$('ha').addEventListener('change',()=>{S.ha=+$('ha').value;save();evK='';render();renderCal()});
+const KS=[...document.querySelector('main').children].filter(k=>k.id!=='nav');
+KS.forEach((k,i)=>{k.dataset.tab=i<6?'home':i===7?'qibla':i===10?'set':'cal';if(k.tagName==='DETAILS')k.open=true});
+function showTab(t){curTab=t;if(t==='cal'&&ttDirty)renderTT();KS.forEach(k=>{k.style.display=k.dataset.tab===t?'':'none'});document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
+$('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)showTab(b.dataset.t)});
+let curPh='',nextAtMs=0;
+{const _r=render;render=function(){_r();tx()}}
+document.querySelectorAll('#nav button').forEach(b=>{b.querySelector('i').innerHTML='<svg class="nic"><use href="#i-'+b.dataset.t+'"/></svg>'});
+try{const c=document.createElement('canvas');c.width=c.height=180;const x=c.getContext('2d');
+ x.fillStyle='#127050';x.fillRect(0,0,180,180);
+ x.fillStyle='#e8c25a';x.beginPath();x.arc(88,92,46,0,7);x.fill();
+ x.fillStyle='#127050';x.beginPath();x.arc(106,80,40,0,7);x.fill();
+ x.fillStyle='#e8c25a';x.beginPath();x.arc(128,62,7,0,7);x.fill();
+ const u=c.toDataURL('image/png');
+ ['apple-touch-icon','icon'].forEach(r=>{const l=document.createElement('link');l.rel=r;l.href=u;document.head.appendChild(l)})}catch(e){}
+showTab('home');
+if(typeof DeviceOrientationEvent==='undefined')$('qc').style.display='none';
+load();render();renderCal();applyLg();
+let lastK=Math.floor(Date.now()/6e4);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){lastK=Math.floor(Date.now()/6e4);render()}});
+setInterval(()=>{const n=Date.now(),k=Math.floor(n/6e4);if(k!==lastK||(nextAtMs&&n>=nextAtMs)){lastK=k;render()}},1000);
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
