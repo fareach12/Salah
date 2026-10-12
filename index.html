@@ -236,8 +236,16 @@ function render(){
  const ni=ds.findIndex(d=>d&&d>now);
  let nextName,nextDate;
  if(ni<0){const tm=calc(addDays(now,1));nextName='Fajr';nextDate=toDate(addDays(now,1),tm.Fajr+ad('Fajr'))}else{nextName=names[ni];nextDate=ds[ni]}
- let ci=-1;ds.forEach((d,i)=>{if(d&&d<=now&&names[i]!=='Sunrise')ci=i});
- $('times').innerHTML=names.map((n,i)=>`<div class="row${i===ci?' on':''}${ds[i]&&ds[i]<=now&&i!==ci?' past':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${n}${i===ci?' · now':''}</span><span>${fmt(ds[i])}${iqS(n,i)}</span></div>`).join('');
+ const dy=(k,x)=>{const b=addDays(now,k);return toDate(b,calc(b)[x]+ad(x))};
+ const pre=ds[0]&&now<ds[0];
+ const mS=pre?dy(-1,'Maghrib'):ds[4],mE=pre?ds[0]:dy(1,'Fajr');
+ const mid=mS&&mE?new Date(mS.getTime()+(mE-mS)/2):null;
+ const asrEnd=ds[4]?new Date(ds[4].getTime()-20*6e4):null;
+ let ci=-1,late=false;
+ if(pre)ci=5;
+ else [[0,ds[0],ds[1]],[2,ds[2],ds[3]],[3,ds[3],asrEnd],[4,ds[4],ds[5]],[5,ds[5],mE]].forEach(([i,a,b])=>{if(a&&b&&now>=a&&now<b)ci=i});
+ if(ci===5&&mid&&now>=mid)late=true; // after Islamic midnight: permissible until Fajr
+ $('times').innerHTML=names.map((n,i)=>`<div class="row${i===ci?' on':''}${ds[i]&&ds[i]<=now&&i!==ci?' past':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${n}${i===ci?(late?' · now (late)':' · now'):''}</span><span>${fmt(ds[i])}${iqS(n,i)}</span></div>`).join('');
  $('nn').textContent=nextName;
  if(ds[0]&&ds[1]&&ds[2]&&ds[4]){
   const dayF=(k,x)=>{const b=addDays(now,k);return toDate(b,calc(b)[x]+ad(x))};
@@ -247,8 +255,8 @@ function render(){
    const d1=new Date(ds[1].getTime()+15*6e4),d2=new Date(ds[2].getTime()-10*6e4);
    const on=(a,b)=>now>=a&&now<b?' on':'';
    $('vol').innerHTML=
-    `<div class="row${on(d1,d2)}"><span>Duha</span><span>${fmt(d1)} – ${fmt(d2)}</span></div>`+
-    `<div class="row${on(third,ne)}"><span>Salatul Layl</span><span>${fmt(third)} – ${fmt(ne)}</span></div>`+
+    `<div class="row${on(d1,d2)}"><span>Duha${on(d1,d2)?' · now':''}</span><span>${fmt(d1)} – ${fmt(d2)}</span></div>`+
+    `<div class="row${on(third,ne)}"><span>Salatul Layl${on(third,ne)?' · now':''}</span><span>${fmt(third)} – ${fmt(ne)}</span></div>`+
     `<div class="row"><span>Islamic midnight</span><span>${fmt(mid)}</span></div>`}}
  if(view===1){const b=addDays(now,1),T1=calc(b);$('times').innerHTML=names.map((n,i)=>{const t=toDate(b,T1[n]+ad(n)),t0=ds[i],df=t&&t0?((t.getHours()*60+t.getMinutes()-t0.getHours()*60-t0.getMinutes()+2160)%1440)-720:0;return `<div class="row"><svg class="ic"><use href="#i-${n}"/></svg><span>${n}</span><span>${fmt(t)}<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">${df>0?'+':df<0?'\u2212':''}${Math.abs(df)} min vs today</small></span></div>`}).join('')}
  {const eff=addDays(now,hOff),hj=hp(eff),hs=hj,wd=eff.getDay(),k=eff.toDateString();
@@ -348,7 +356,7 @@ function scanEv(td){const out=[],got={};let white=null;
 let view=0,hd=null;
 const TB=[['left','haray','متبقي'],['Home','Guriga','الرئيسية'],['Calendar','Kalandarka','التقويم'],['Next prayer','Salaadda xigta','الصلاة القادمة'],['Today','Maanta','اليوم'],['Tomorrow','Berri','غدًا'],['today','maanta','اليوم'],['tomorrow','berri','غدًا'],
 ['Fajr','Subax','الفجر'],['Sunrise','Qorrax-soo-bax','الشروق'],['Dhuhr','Duhur','الظهر'],['Asr','Casar','العصر'],['Maghrib','Maqrib','المغرب'],['Isha','Cishe','العشاء'],
-[' · now',' · hadda',' · الآن'],[' AM',' AM',' ص'],[' PM',' PM',' م'],
+[' · now (late)',' · hadda (daahay)',' · الآن (متأخر)'],[' · now',' · hadda',' · الآن'],[' AM',' AM',' ص'],[' PM',' PM',' م'],
 ['Voluntary prayers','Salaadaha Sunnada','صلوات النوافل'],['Duha','Duxo','الضحى'],['Salatul Layl','Salaadda Habeenka','قيام الليل'],['Islamic midnight','Badhtamaha habeenka','منتصف الليل'],
 ['Fasting','Soonka','الصيام'],['Suhoor ends (Fajr)','Suxuurka wuu dhamaadaa (Subax)','نهاية السحور (الفجر)'],['Iftar (Maghrib)','Iftaarka (Maqrib)','الإفطار (المغرب)'],['Suhoor ends in ','Suxuurku wuu dhamaanayaa: ','ينتهي السحور بعد '],['Iftar in ','Iftaarka: ','الإفطار بعد '],['Next Suhoor ends ','Suxuurka xiga wuu dhamaanayaa ','ينتهي السحور القادم '],
 ['Ramadan fast','Soonka Ramadaanka','صيام رمضان'],['No fasting today (Eid days)','Maanta ma soomi karto (maalmaha Ciidda)','لا صيام اليوم (أيام العيد)'],['Monday sunnah','Isniinta sunno','الاثنين سنة'],['Thursday sunnah','Khamiista sunno','الخميس سنة'],['White days begin','Maalmaha Cadcad way bilaabmayaan','تبدأ الأيام البيض'],['White day','Maalin Cad','يوم أبيض'],['no special fast day','maalin soon gaar ah ma aha','لا صيام مخصوص'],['Ashura','Caashuuraa','عاشوراء'],
