@@ -335,7 +335,7 @@ $('city').addEventListener('change',()=>{const c=CT.find(x=>x.n.toLowerCase()===
   {timeout:15000,maximumAge:60000})}}
 S.adj=S.adj||{};
 S.iq=S.iq||{Fajr:20,Dhuhr:15,Asr:15,Maghrib:5,Isha:15};
-$('iqa').innerHTML=['Fajr','Dhuhr','Asr','Maghrib','Isha'].map(n=>`<div style="flex:1 1 30%"><label style="margin:4px 0 2px">${n}</label><input type="number" min="0" step="1" inputmode="numeric" data-n="${n}" value="${S.iq[n]||0}"></div>`).join('');
+$('iqa').innerHTML=['Fajr','Dhuhr','Asr','Maghrib','Isha'].map(n=>`<div style="flex:1 1 30%"><label style="margin:4px 0 2px">${n}</label><input type="number" min="0" step="1" inputmode="numeric" data-n="${n}" value="${+S.iq[n]||0}"></div>`).join('');
 $('iqa').addEventListener('change',e=>{const n=e.target.dataset.n;if(n){S.iq[n]=Math.max(0,parseInt(e.target.value)||0);save();render()}});
 $('adj').innerHTML=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].map(n=>`<div style="flex:1 1 30%"><label style="margin:4px 0 2px">${n}</label><div class="sg"><button type="button" class="sb" data-n="${n}" data-neg="${(S.adj[n]||0)<0?1:0}">${(S.adj[n]||0)<0?'−':'+'}</button><input type="number" min="0" step="1" inputmode="numeric" data-n="${n}" value="${Math.abs(S.adj[n]||0)}"></div></div>`).join('');
 const upA=n=>{const b=$('adj').querySelector('.sb[data-n="'+n+'"]'),i=$('adj').querySelector('input[data-n="'+n+'"]');S.adj[n]=(b.dataset.neg==='1'?-1:1)*Math.abs(parseInt(i.value)||0);save();render()};
