@@ -108,6 +108,7 @@ button,summary{touch-action:manipulation;-webkit-tap-highlight-color:transparent
 html,body{overscroll-behavior:none}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,select{-webkit-user-select:text;user-select:text}
+#agt{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px;margin-top:10px}#agt button{border:0;background:transparent;border-radius:999px;padding:8px}#agt .act{background:var(--ac);color:#fff}#ago .row{flex-direction:column;gap:2px;padding:7px 8px}#ago .row span:first-child{color:var(--mu);font-size:.8rem}#ago .row span:last-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -121,6 +122,7 @@ input,select{-webkit-user-select:text;user-select:text}
 <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8 M5 10v10h14V10 M10 20v-6h4v6"/></symbol>
 <symbol id="i-qibla" viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M16 8l-2 6-6 2 2-6z"/></symbol>
 <symbol id="i-cal" viewBox="0 0 24 24"><path d="M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4"/></symbol>
+<symbol id="i-tools" viewBox="0 0 24 24"><path d="M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z"/></symbol>
 <symbol id="i-set" viewBox="0 0 24 24"><path d="M4 7h10 M18 7h2 M4 17h2 M10 17h10 M16 5v4 M8 15v4"/></symbol>
 </defs></svg>
 <main>
@@ -189,7 +191,22 @@ input,select{-webkit-user-select:text;user-select:text}
   <label>Iqama: minutes after adhan (0 = hide)</label>
   <div class="f" id="iqa" style="flex-wrap:wrap"></div>
  </details>
-<nav id="nav"><button data-t="home" class="on"><i>🏠</i><span>Home</span></button><button data-t="qibla"><i>🧭</i><span>Qibla</span></button><button data-t="cal"><i>📅</i><span>Calendar</span></button><button data-t="set"><i>⚙️</i><span>Settings</span></button></nav>
+<details class="card" data-x="tools"><summary>Reminders</summary>
+ <div class="mu">Alerts show while the app is open or was used recently. Alerts with the app fully closed need the native app.</div>
+ <label>Minutes · before or after · prayer</label><div class="f"><input id="rm" type="number" min="0" max="180" value="15" inputmode="numeric" style="width:70px"><select id="rd"><option value="-1">before</option><option value="1">after</option></select><select id="rp"><option value="Fajr">Fajr</option><option value="Sunrise">Sunrise</option><option value="Dhuhr">Dhuhr / Jumu’ah</option><option value="Asr">Asr</option><option value="Maghrib">Maghrib</option><option value="Isha">Isha</option></select></div>
+ <input id="rl" placeholder="Label (e.g. Read Quran)" maxlength="40" style="width:100%;margin-top:8px">
+ <button id="ra" type="button" style="margin-top:8px;width:100%">Add reminder</button>
+ <button id="rn" type="button" style="margin-top:8px;width:100%"></button>
+ <div id="rls" class="mu" style="margin-top:8px"></div>
+</details>
+<details class="card" data-x="tools"><summary>Age calculator</summary>
+ <label>I know the birth date in:</label>
+ <div class="f" id="agt"><button type="button" data-c="g" class="act">Gregorian</button><button type="button" data-c="h">Hijri</button></div>
+ <div class="f" style="margin-top:10px"><select id="agd" aria-label="Day"></select><select id="agm" aria-label="Month" style="flex:1.6"></select><input id="agy" type="number" inputmode="numeric" placeholder="Year" aria-label="Year" style="flex:1.2"></div>
+ <label>Age on (Gregorian date, default today)</label><div class="f"><input id="ag2" type="date"><button id="agn" type="button" style="flex:0 0 auto">Today</button></div>
+ <div id="ago" style="margin-top:12px"></div>
+</details>
+<nav id="nav"><button data-t="home" class="on"><i>🏠</i><span>Home</span></button><button data-t="qibla"><i>🧭</i><span>Qibla</span></button><button data-t="cal"><i>📅</i><span>Calendar</span></button><button data-t="tools"><i></i><span>Tools</span></button><button data-t="set"><i>⚙️</i><span>Settings</span></button></nav>
 </main>
 <script>
 const $=id=>document.getElementById(id);
@@ -227,6 +244,7 @@ const hp=d=>{const o={};hf.formatToParts(S.ha?addDays(d,S.ha):d).forEach(p=>o[p.
 const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n,12);
 let anchor=new Date(),hOff=0;
 let lastDay='';
+const lab=(n,d)=>n==='Dhuhr'&&d&&d.getDay()===5?'Jumu’ah':n;
 function render(){
  const now=new Date(),T=calc(now),names=Object.keys(T);
  const ad=n=>((S.adj&&S.adj[n])||0)/60;
@@ -245,8 +263,8 @@ function render(){
  if(pre)ci=5;
  else [[0,ds[0],ds[1]],[2,ds[2],ds[3]],[3,ds[3],asrEnd],[4,ds[4],ds[5]],[5,ds[5],mE]].forEach(([i,a,b])=>{if(a&&b&&now>=a&&now<b)ci=i});
  if(ci===5&&mid&&now>=mid)late=true; // after Islamic midnight: permissible until Fajr
- $('times').innerHTML=names.map((n,i)=>`<div class="row${i===ci?' on':''}${ds[i]&&ds[i]<=now&&i!==ci?' past':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${n}${i===ci?(late?' · now (late)':' · now'):''}</span><span>${fmt(ds[i])}${iqS(n,i)}</span></div>`).join('');
- $('nn').textContent=nextName;
+ $('times').innerHTML=names.map((n,i)=>`<div class="row${i===ci?' on':''}${ds[i]&&ds[i]<=now&&i!==ci?' past':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${lab(n,now)}${i===ci?(late?' · now (late)':' · now'):''}</span><span>${fmt(ds[i])}${iqS(n,i)}</span></div>`).join('');
+ $('nn').textContent=lab(nextName,nextDate);
  if(ds[0]&&ds[1]&&ds[2]&&ds[4]){
   const dayF=(k,x)=>{const b=addDays(now,k);return toDate(b,calc(b)[x]+ad(x))};
   let ns,ne;if(now<ds[0]){ns=dayF(-1,'Maghrib');ne=ds[0]}else{ns=ds[4];ne=dayF(1,'Fajr')}
@@ -258,7 +276,7 @@ function render(){
     `<div class="row${on(d1,d2)}"><span>Duha${on(d1,d2)?' · now':''}</span><span>${fmt(d1)} – ${fmt(d2)}</span></div>`+
     `<div class="row${on(third,ne)}"><span>Salatul Layl${on(third,ne)?' · now':''}</span><span>${fmt(third)} – ${fmt(ne)}</span></div>`+
     `<div class="row"><span>Islamic midnight</span><span>${fmt(mid)}</span></div>`}}
- if(view===1){const b=addDays(now,1),T1=calc(b);$('times').innerHTML=names.map((n,i)=>{const t=toDate(b,T1[n]+ad(n)),t0=ds[i],df=t&&t0?((t.getHours()*60+t.getMinutes()-t0.getHours()*60-t0.getMinutes()+2160)%1440)-720:0;return `<div class="row"><svg class="ic"><use href="#i-${n}"/></svg><span>${n}</span><span>${fmt(t)}<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">${df>0?'+':df<0?'\u2212':''}${Math.abs(df)} min vs today</small></span></div>`}).join('')}
+ if(view===1){const b=addDays(now,1),T1=calc(b);$('times').innerHTML=names.map((n,i)=>{const t=toDate(b,T1[n]+ad(n)),t0=ds[i],df=t&&t0?((t.getHours()*60+t.getMinutes()-t0.getHours()*60-t0.getMinutes()+2160)%1440)-720:0;return `<div class="row"><svg class="ic"><use href="#i-${n}"/></svg><span>${lab(n,b)}</span><span>${fmt(t)}<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">${df>0?'+':df<0?'\u2212':''}${Math.abs(df)} min vs today</small></span></div>`}).join('')}
  {const eff=addDays(now,hOff),hj=hp(eff),hs=hj,wd=eff.getDay(),k=eff.toDateString();
   if(evK!==k){evK=k;evC=scanEv(eff)}
   const dl=i=>i===0?'today':i===1?'tomorrow':'in '+i+' days';
@@ -355,7 +373,7 @@ function scanEv(td){const out=[],got={};let white=null;
  out.sort((a,b)=>a.i-b.i);return{out,white}}
 let view=0,hd=null;
 const TB=[['left','haray','متبقي'],['Home','Guriga','الرئيسية'],['Calendar','Kalandarka','التقويم'],['Next prayer','Salaadda xigta','الصلاة القادمة'],['Today','Maanta','اليوم'],['Tomorrow','Berri','غدًا'],['today','maanta','اليوم'],['tomorrow','berri','غدًا'],
-['Fajr','Subax','الفجر'],['Sunrise','Qorrax-soo-bax','الشروق'],['Dhuhr','Duhur','الظهر'],['Asr','Casar','العصر'],['Maghrib','Maqrib','المغرب'],['Isha','Cishe','العشاء'],
+['Fajr','Subax','الفجر'],['Sunrise','Qorrax-soo-bax','الشروق'],['Dhuhr','Duhur','الظهر'],['Jumu’ah','Jimce','الجمعة'],['Tools','Qalab','أدوات'],['Reminders','Xusuusin','تذكيرات'],['Age calculator','Xisaabiyaha da’da','حاسبة العمر'],['Asr','Casar','العصر'],['Maghrib','Maqrib','المغرب'],['Isha','Cishe','العشاء'],
 [' · now (late)',' · hadda (daahay)',' · الآن (متأخر)'],[' · now',' · hadda',' · الآن'],[' AM',' AM',' ص'],[' PM',' PM',' م'],
 ['Voluntary prayers','Salaadaha Sunnada','صلوات النوافل'],['Duha','Duxo','الضحى'],['Salatul Layl','Salaadda Habeenka','قيام الليل'],['Islamic midnight','Badhtamaha habeenka','منتصف الليل'],
 ['Fasting','Soonka','الصيام'],['Suhoor ends (Fajr)','Suxuurka wuu dhamaadaa (Subax)','نهاية السحور (الفجر)'],['Iftar (Maghrib)','Iftaarka (Maqrib)','الإفطار (المغرب)'],['Suhoor ends in ','Suxuurku wuu dhamaanayaa: ','ينتهي السحور بعد '],['Iftar in ','Iftaarka: ','الإفطار بعد '],['Next Suhoor ends ','Suxuurka xiga wuu dhamaanayaa ','ينتهي السحور القادم '],
@@ -406,7 +424,7 @@ $('th').value=S.th||'auto';applyTh();$('th').addEventListener('change',()=>{S.th
 if(!M[S.me])S.me='MWL';
 $('ha').addEventListener('change',()=>{S.ha=+$('ha').value;save();evK='';render();renderCal()});
 const KS=[...document.querySelector('main').children].filter(k=>k.id!=='nav');
-KS.forEach((k,i)=>{k.dataset.tab=i<6?'home':i===7?'qibla':i===10?'set':'cal';if(k.tagName==='DETAILS')k.open=true});
+KS.forEach((k,i)=>{k.dataset.tab=k.dataset.x||(i<6?'home':i===7?'qibla':i===10?'set':'cal');if(k.tagName==='DETAILS')k.open=true});
 function showTab(t){curTab=t;if(t==='cal'&&ttDirty)renderTT();KS.forEach(k=>{k.style.display=k.dataset.tab===t?'':'none'});document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
 $('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 let curPh='',nextAtMs=0;
@@ -421,6 +439,50 @@ try{const c=document.createElement('canvas');c.width=c.height=180;const x=c.getC
  ['apple-touch-icon','icon'].forEach(r=>{const l=document.createElement('link');l.rel=r;l.href=u;document.head.appendChild(l)})}catch(e){}
 showTab('home');
 if(typeof DeviceOrientationEvent==='undefined')$('qc').style.display='none';
+
+S.rem=S.rem||[];S.rf=S.rf||{};
+const ptm=(d,n)=>toDate(d,calc(d)[n]+(((S.adj&&S.adj[n])||0)/60));
+const remTxt=(r,d)=>(r.m?`${r.m} min ${r.d<0?'before':'after'} `:'At ')+lab(r.p,d||new Date())+(r.l?` \u2013 ${r.l}`:'');
+function fireRem(r,d){const x=remTxt(r,d);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}
+ const b=document.createElement('div');b.textContent='\u23F0 '+x;b.style.cssText='position:fixed;top:12px;left:12px;right:12px;z-index:99;padding:14px;border-radius:12px;background:#127050;color:#fff;font-weight:600;text-align:center;box-shadow:0 4px 16px #0006';b.onclick=()=>b.remove();document.body.appendChild(b);setTimeout(()=>b.remove(),30000);
+ try{if(window.Notification&&Notification.permission==='granted')navigator.serviceWorker.ready.then(g=>g.showNotification('Salah',{body:x,icon:'icon-192.png',tag:r.id}))}catch(e){}}
+function chkRem(){const now=new Date(),dk=now.toDateString();
+ for(const k in S.rf)if(S.rf[k]!==dk)delete S.rf[k];
+ S.rem.forEach(r=>{const p=ptm(now,r.p);if(!p||S.rf[r.id]===dk)return;const df=now-new Date(p.getTime()+r.d*r.m*6e4);if(df>=0&&df<12e4){S.rf[r.id]=dk;save();fireRem(r,now)}})}
+function rList(){const bx=$('rls');bx.textContent='';S.rem.forEach(r=>{const w=document.createElement('div');w.className='row';const t=document.createElement('span');t.textContent=remTxt(r);const b=document.createElement('button');b.type='button';b.textContent='\u2715';b.setAttribute('aria-label','Delete');b.onclick=()=>{S.rem=S.rem.filter(x=>x.id!==r.id);save();rList()};w.append(t,b);bx.appendChild(w)});if(!S.rem.length)bx.textContent='No reminders yet'}
+$('ra').onclick=()=>{S.rem.push({id:'r'+Date.now(),p:$('rp').value,d:+$('rd').value,m:Math.max(0,Math.min(180,parseInt($('rm').value)||0)),l:$('rl').value.trim().slice(0,40)});$('rl').value='';save();rList();chkRem()};
+const rnS=()=>{$('rn').textContent=!window.Notification?'Notifications not supported':Notification.permission==='granted'?'Notifications on \u2713':'Enable notifications'};
+$('rn').onclick=()=>{if(window.Notification&&Notification.permission==='default')Notification.requestPermission().then(rnS)};
+rnS();rList();
+{const _r2=render;render=function(){_r2();chkRem()}}
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const GM=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let agC='g';
+function h2g(y,m,d){const tv=y*1e4+m*100+d;let g=new Date(Math.round(y*.970229+621.574),0,1,12);
+ for(let i=0;i<60;i++){const c=hp(g);if(c.year*1e4+c.month*100+c.day===tv)return g;let st=Math.round(((y-c.year)*12+(m-c.month))*29.5306+(d-c.day));if(!st)st=tv>c.year*1e4+c.month*100+c.day?1:-1;g=addDays(g,st)}return null}
+function agFill(){const h=agC==='h',op=(v,t)=>`<option value="${v}">${t}</option>`;
+ $('agd').innerHTML=op('','Day')+Array.from({length:h?30:31},(_,i)=>op(i+1,i+1)).join('');
+ $('agm').innerHTML=op('','Month')+(h?HM:GM).map((n,i)=>op(i+1,n)).join('');$('agy').placeholder=h?'Year (AH)':'Year'}
+const gf=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),hf2=h=>`${h.day} ${HM[h.month-1]} ${h.year} AH`;
+function agCalc(){const o=$('ago'),dd=+$('agd').value,mm=+$('agm').value,yy=+$('agy').value,e=$('ag2').value,h=agC==='h';
+ if(!dd||!mm||!yy||!e){o.innerHTML='<div class="mu">Pick the day, month and year to see the age.</div>';return}
+ const end=new Date(e+'T12:00:00');let gb,hb;
+ if(h){hb={year:yy,month:mm,day:dd};gb=h2g(yy,mm,dd);if(!gb||yy<1300||yy>1600){o.innerHTML='<div class="mu">That Hijri date does not exist (check the day, month and year).</div>';return}}
+ else{gb=new Date(yy,mm-1,dd,12);if(yy<1000||gb.getMonth()!==mm-1){o.innerHTML='<div class="mu">That date does not exist (check the day, month and year).</div>';return}hb=hp(gb)}
+ if(gb>end){o.innerHTML='<div class="mu">The birth date is after the \u201cage on\u201d date.</div>';return}
+ let y=end.getFullYear()-gb.getFullYear(),m=end.getMonth()-gb.getMonth(),d=end.getDate()-gb.getDate();
+ if(d<0){m--;d+=new Date(end.getFullYear(),end.getMonth(),0).getDate()}if(m<0){y--;m+=12}
+ const he=hp(end);let hy=he.year-hb.year,hm=he.month-hb.month,hd=he.day-hb.day;
+ if(hd<0){hm--;hd+=hp(addDays(end,-he.day)).day}if(hm<0){hy--;hm+=12}
+ const n=Math.round((end-gb)/864e5),nb=(()=>{let g=new Date(end.getFullYear(),gb.getMonth(),gb.getDate(),12);if(g<end)g=new Date(end.getFullYear()+1,gb.getMonth(),gb.getDate(),12);return Math.round((g-end)/864e5)})(),
+ nh=(()=>{let g=h2g(he.year,hb.month,hb.day);if(g&&g<end)g=h2g(he.year+1,hb.month,hb.day);return g?Math.round((g-end)/864e5):null})(),
+ L=(a,b)=>`<div class="row"><span>${a}</span><span>${b}</span></div>`,N=x=>x.toLocaleString();
+ o.innerHTML=L('Born',`${gf(gb)}<br>${hf2(hb)}`)+L('Age (Gregorian)',`${y} years, ${m} months, ${d} days`)+L('Age (Hijri)',`${hy} years, ${hm} months, ${hd} days`)+
+  L('In years',`${(n/365.2425).toFixed(2)} Gregorian<br>${(n/354.367).toFixed(2)} Hijri`)+L('In months',`${N(y*12+m)} Gregorian<br>${N(hy*12+hm)} Hijri`)+L('In weeks',N(Math.floor(n/7)))+L('In days',N(n))+L('In hours',N(n*24))+
+  L('Next birthday',`${nb} days (Gregorian)${nh!==null?`<br>${nh} days (Hijri)`:''}`)}
+document.querySelectorAll('#agt button').forEach(b=>b.onclick=()=>{agC=b.dataset.c;document.querySelectorAll('#agt button').forEach(x=>x.classList.toggle('act',x===b));agFill();agCalc()});
+$('ag2').value=iso(new Date());$('agn').onclick=()=>{$('ag2').value=iso(new Date());agCalc()};
+['agd','agm','agy','ag2'].forEach(i=>{$(i).addEventListener('change',agCalc);$(i).addEventListener('input',agCalc)});agFill();agCalc();
 load();render();renderCal();applyLg();
 let lastK=Math.floor(Date.now()/6e4);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){lastK=Math.floor(Date.now()/6e4);render()}});
