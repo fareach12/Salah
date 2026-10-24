@@ -109,6 +109,37 @@ html,body{overscroll-behavior:none}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,select{-webkit-user-select:text;user-select:text}
 #agt{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px;margin-top:10px}#agt button{border:0;background:transparent;border-radius:999px;padding:8px}#agt .act{background:var(--ac);color:#fff}#ago .row{flex-direction:column;gap:2px;padding:7px 8px}#ago .row span:first-child{color:var(--mu);font-size:.8rem}#ago .row span:last-child{font-weight:600}
+
+@media(min-width:700px){
+main{max-width:680px;padding:24px 20px 110px}
+#nav{justify-content:center;gap:8px}
+#nav button{flex:0 1 120px}
+}
+@media(min-width:1000px){
+main{max-width:1120px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;align-items:start;padding:28px 28px 110px}
+main>.card:first-child,main>.card:nth-child(2),#dv{grid-column:1/-1}
+#dv{width:100%;max-width:340px;justify-self:center;margin-bottom:16px}
+main>.card:nth-child(2){padding:10px 28px 28px}
+.bigt{font-size:3.4rem}
+.ring{width:130px;height:130px}
+#times{grid-column:1;grid-row:4/span 2}
+#vol,#vol{padding:0}
+main>[data-tab=home]:nth-child(5){grid-column:2;grid-row:4}
+main>[data-tab=home]:nth-child(6){grid-column:2;grid-row:5}
+main>#tt{grid-column:1/-1}
+main>[data-tab=qibla],main>[data-tab=set]{grid-column:1/-1;width:100%;max-width:640px;justify-self:center}
+}
+@media(min-width:1000px) and (min-height:1px){#times .row{padding:12px 10px}}
+#times .row.sr{font-size:.92rem;color:var(--mu);font-weight:400}#times .row.sr span:first-of-type,#times .row.sr>span:nth-of-type(2){font-weight:400}
+/* Sunrise: not a prayer, so quieter and lighter than the five salah rows */
+#times .row:nth-child(2){padding:7px 12px;margin:3px 6px;font-size:.95rem;border-radius:14px;border:1px dashed var(--ln);background:transparent;color:var(--mu);box-shadow:none}
+#times .row:nth-child(2) span:first-of-type,#times .row:nth-child(2)>span:nth-of-type(2){font-weight:400;letter-spacing:.02em}
+#times .row:nth-child(2) .ic{width:30px;height:30px;padding:6px;background:rgba(232,194,90,.16);color:#c99a2e}
+#times .row:nth-child(2).past{opacity:.6}
+#tt th:nth-child(3),#tt td:nth-child(3){color:var(--mu);font-weight:400}
+
+#times .row.sr{margin:2px 18px;padding:6px 10px;background:transparent;border-radius:12px}
+#times .row.sr .ic{width:32px;height:32px;padding:7px;background:transparent;color:#c8962a;border:1.5px dashed var(--ln);margin-inline-end:10px}
 </style>
 </head>
 <body>
@@ -166,7 +197,7 @@ input,select{-webkit-user-select:text;user-select:text}
    <div><label>Latitude</label><input id="lat" type="number" step="any" inputmode="decimal"></div>
    <div><label>Longitude</label><input id="lng" type="number" step="any" inputmode="decimal"></div>
   </div></details>
-  <label>City (type to search)</label><input id="city" list="cl" placeholder="e.g. London" style="width:100%" autocomplete="off"><datalist id="cl"></datalist>
+  <label>City (type to search)</label><select id="city" style="width:100%"></select>
   <button id="loc" type="button" style="margin-top:8px;width:100%">Use my location</button><div class="mu" id="locs"></div>
   <label>Calculation method</label>
   <select id="me" style="width:100%">
@@ -251,7 +282,7 @@ function render(){
   const iqS=(n,i)=>{const m=(S.iq&&S.iq[n])||0;if(!m||!ds[i])return'';const q=new Date(ds[i].getTime()+m*6e4);const w=ds[i]<=now&&now<q?` · in ${Math.ceil((q-now)/6e4)} min`:'';return `<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">Iqama ${fmt(q)}${w}</small>`};
  const ds=names.map(n=>toDate(now,T[n]+ad(n)));
  hOff=ds[4]&&now>=ds[4]?1:0;
- const ni=ds.findIndex(d=>d&&d>now);
+ const ni=ds.findIndex((d,i)=>i!==1&&d&&d>now);
  let nextName,nextDate;
  if(ni<0){const tm=calc(addDays(now,1));nextName='Fajr';nextDate=toDate(addDays(now,1),tm.Fajr+ad('Fajr'))}else{nextName=names[ni];nextDate=ds[ni]}
  const dy=(k,x)=>{const b=addDays(now,k);return toDate(b,calc(b)[x]+ad(x))};
@@ -263,7 +294,7 @@ function render(){
  if(pre)ci=5;
  else [[0,ds[0],ds[1]],[2,ds[2],ds[3]],[3,ds[3],asrEnd],[4,ds[4],ds[5]],[5,ds[5],mE]].forEach(([i,a,b])=>{if(a&&b&&now>=a&&now<b)ci=i});
  if(ci===5&&mid&&now>=mid)late=true; // after Islamic midnight: permissible until Fajr
- $('times').innerHTML=names.map((n,i)=>`<div class="row${i===ci?' on':''}${ds[i]&&ds[i]<=now&&i!==ci?' past':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${lab(n,now)}${i===ci?(late?' · now (late)':' · now'):''}</span><span>${fmt(ds[i])}${iqS(n,i)}</span></div>`).join('');
+ $('times').innerHTML=names.map((n,i)=>`<div class="row${i===ci?' on':''}${ds[i]&&ds[i]<=now&&i!==ci?' past':''}${i===1?' sr':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${lab(n,now)}${i===ci?(late?' · now (late)':' · now'):''}</span><span>${fmt(ds[i])}${iqS(n,i)}</span></div>`).join('');
  $('nn').textContent=lab(nextName,nextDate);
  if(ds[0]&&ds[1]&&ds[2]&&ds[4]){
   const dayF=(k,x)=>{const b=addDays(now,k);return toDate(b,calc(b)[x]+ad(x))};
@@ -276,7 +307,7 @@ function render(){
     `<div class="row${on(d1,d2)}"><span>Duha${on(d1,d2)?' · now':''}</span><span>${fmt(d1)} – ${fmt(d2)}</span></div>`+
     `<div class="row${on(third,ne)}"><span>Salatul Layl${on(third,ne)?' · now':''}</span><span>${fmt(third)} – ${fmt(ne)}</span></div>`+
     `<div class="row"><span>Islamic midnight</span><span>${fmt(mid)}</span></div>`}}
- if(view===1){const b=addDays(now,1),T1=calc(b);$('times').innerHTML=names.map((n,i)=>{const t=toDate(b,T1[n]+ad(n)),t0=ds[i],df=t&&t0?((t.getHours()*60+t.getMinutes()-t0.getHours()*60-t0.getMinutes()+2160)%1440)-720:0;return `<div class="row"><svg class="ic"><use href="#i-${n}"/></svg><span>${lab(n,b)}</span><span>${fmt(t)}<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">${df>0?'+':df<0?'\u2212':''}${Math.abs(df)} min vs today</small></span></div>`}).join('')}
+ if(view===1){const b=addDays(now,1),T1=calc(b);$('times').innerHTML=names.map((n,i)=>{const t=toDate(b,T1[n]+ad(n)),t0=ds[i],df=t&&t0?((t.getHours()*60+t.getMinutes()-t0.getHours()*60-t0.getMinutes()+2160)%1440)-720:0;return `<div class="row${i===1?' sr':''}"><svg class="ic"><use href="#i-${n}"/></svg><span>${lab(n,b)}</span><span>${fmt(t)}<small style="display:block;text-align:right;font-size:.72rem;font-weight:400;opacity:.75">${df>0?'+':df<0?'\u2212':''}${Math.abs(df)} min vs today</small></span></div>`}).join('')}
  {const eff=addDays(now,hOff),hj=hp(eff),hs=hj,wd=eff.getDay(),k=eff.toDateString();
   if(evK!==k){evK=k;evC=scanEv(eff)}
   const dl=i=>i===0?'today':i===1?'tomorrow':'in '+i+' days';
@@ -306,7 +337,7 @@ function render(){
  {const sg=JSON.stringify([S.lat,S.lng,S.me,S.as,S.fm,S.adj,S.ha,now.toDateString()+hOff]);if(sg!==ttSig){ttSig=sg;ttDirty=true;if(curTab==='cal')renderTT()}}
  $('cp').textContent=S.city?'📍 '+S.city:'';
  $('nt').textContent=nextDate?fmt(nextDate):'';
- {const pv=(ni<0?ds[5]:ds.filter(d=>d&&d<=now).pop())||toDate(addDays(now,-1),calc(addDays(now,-1)).Isha+ad('Isha'));
+ {const pv=(ni<0?ds[5]:ds.filter((d,i)=>i!==1&&d&&d<=now).pop())||toDate(addDays(now,-1),calc(addDays(now,-1)).Isha+ad('Isha'));
   const fr=nextDate&&pv?Math.min(1,Math.max(0,(now-pv)/(nextDate-pv))):0;
   $('rf').setAttribute('stroke-dasharray',((1-fr)*276.46).toFixed(1)+' 276.46');
   $('rh').textContent=nextDate?hm(Math.max(0,nextDate-now)):'';
@@ -332,13 +363,14 @@ function renderCal(){
  $('cal').innerHTML=html}
 $('pv').onclick=()=>{const h=hp(anchor);anchor=addDays(anchor,-h.day);renderCal()};
 $('nx').onclick=()=>{const h=hp(anchor);anchor=addDays(anchor,31-h.day);renderCal()};
-function load(){$('city').value=S.city||'';$('lat').value=S.lat;$('lng').value=S.lng;$('me').value=S.me;$('as').value=S.as;$('fm').value=S.fm;$('ha').value=String(S.ha||0)}
+function load(){setCity(S.city);$('lat').value=S.lat;$('lng').value=S.lng;$('me').value=S.me;$('as').value=S.as;$('fm').value=S.fm;$('ha').value=String(S.ha||0)}
 function upd(){const a=parseFloat($('lat').value),b=parseFloat($('lng').value);
  if(!isNaN(a)&&!isNaN(b)&&Math.abs(a)<=90&&Math.abs(b)<=180){S.lat=a;S.lng=b}
  S.me=$('me').value;S.as=+$('as').value;S.fm=$('fm').value;save();render()}
 ['lat','lng','me','as','fm'].forEach(i=>$(i).addEventListener('change',upd));
 const CT=('Borama (Awdal),9.9361,43.1828;Zeila (Awdal),11.3547,43.4744;Lughaya (Awdal),10.7186,43.9364;Baki (Awdal),10.4,43.3;Hargeisa,9.56,44.065;Berbera,10.4396,45.0143;Burao,9.5221,45.5336;Djibouti,11.5721,43.1456;Makkah,21.4225,39.8262;Madinah,24.4686,39.6142;Riyadh,24.7136,46.6753;Jeddah,21.4858,39.1925;Dubai,25.2048,55.2708;Abu Dhabi,24.4539,54.3773;Doha,25.2854,51.531;Kuwait City,29.3759,47.9774;Manama,26.2285,50.586;Muscat,23.588,58.3829;Sanaa,15.3694,44.191;Baghdad,33.3152,44.3661;Amman,31.9454,35.9284;Jerusalem,31.7683,35.2137;Gaza,31.5017,34.4668;Beirut,33.8938,35.5018;Damascus,33.5138,36.2765;Istanbul,41.0082,28.9784;Ankara,39.9334,32.8597;Tehran,35.6892,51.389;Cairo,30.0444,31.2357;Alexandria,31.2001,29.9187;Khartoum,15.5007,32.5599;Tripoli,32.8872,13.1913;Tunis,36.8065,10.1815;Algiers,36.7538,3.0588;Casablanca,33.5731,-7.5898;Rabat,34.0209,-6.8416;Nouakchott,18.0735,-15.9582;Dakar,14.7167,-17.4677;Lagos,6.5244,3.3792;Abuja,9.0765,7.3986;Kano,12.0022,8.592;Accra,5.6037,-0.187;Addis Ababa,9.03,38.74;Mogadishu,2.0469,45.3182;Nairobi,-1.2921,36.8219;Dar es Salaam,-6.7924,39.2083;Johannesburg,-26.2041,28.0473;Cape Town,-33.9249,18.4241;Karachi,24.8607,67.0011;Lahore,31.5204,74.3587;Islamabad,33.6844,73.0479;Delhi,28.6139,77.209;Mumbai,19.076,72.8777;Hyderabad,17.385,78.4867;Dhaka,23.8103,90.4125;Kabul,34.5553,69.2075;Tashkent,41.2995,69.2401;Baku,40.4093,49.8671;Kuala Lumpur,3.139,101.6869;Singapore,1.3521,103.8198;Jakarta,-6.2088,106.8456;Manila,14.5995,120.9842;Bangkok,13.7563,100.5018;Beijing,39.9042,116.4074;Tokyo,35.6762,139.6503;Sydney,-33.8688,151.2093;Melbourne,-37.8136,144.9631;London,51.5072,-0.1276;Birmingham,52.4862,-1.8904;Manchester,53.4808,-2.2426;Dublin,53.3498,-6.2603;Paris,48.8566,2.3522;Marseille,43.2965,5.3698;Brussels,50.8503,4.3517;Amsterdam,52.3676,4.9041;Berlin,52.52,13.405;Frankfurt,50.1109,8.6821;Madrid,40.4168,-3.7038;Rome,41.9028,12.4964;Vienna,48.2082,16.3738;Stockholm,59.3293,18.0686;Oslo,59.9139,10.7522;Copenhagen,55.6761,12.5683;Sarajevo,43.8563,18.4131;Moscow,55.7558,37.6173;New York,40.7128,-74.006;Washington DC,38.9072,-77.0369;Chicago,41.8781,-87.6298;Houston,29.7604,-95.3698;Dallas,32.7767,-96.797;Los Angeles,34.0522,-118.2437;San Francisco,37.7749,-122.4194;Detroit,42.3314,-83.0458;Toronto,43.6532,-79.3832;Montreal,45.5019,-73.5674;Vancouver,49.2827,-123.1207;Mexico City,19.4326,-99.1332;Sao Paulo,-23.5505,-46.6333').split(';').map(s=>{const p=s.split(',');return{n:p[0],a:+p[1],b:+p[2]}});
-$('cl').innerHTML=CT.map(c=>`<option value="${c.n}">`).join('');
+$('city').innerHTML=CT.map(c=>`<option value="${c.n}">${c.n}</option>`).join('');
+function setCity(n){const el=$('city');n=n||'';if(n&&![...el.options].some(o=>o.value===n)){const o=document.createElement('option');o.value=n;o.textContent=n;el.insertBefore(o,el.firstChild)}el.value=n}
 $('city').addEventListener('change',()=>{const c=CT.find(x=>x.n.toLowerCase()===$('city').value.trim().toLowerCase());
  if(c){S.city=c.n;S.lat=c.a;S.lng=c.b;$('city').value=c.n;$('lat').value=c.a;$('lng').value=c.b;save();render()}});
 {const hav=(a,b,c,d)=>12742*Math.asin(Math.sqrt(sin((c-a)/2)**2+cos(a)*cos(c)*sin((d-b)/2)**2));
@@ -348,7 +380,7 @@ $('city').addEventListener('change',()=>{const c=CT.find(x=>x.n.toLowerCase()===
    const a=+p.coords.latitude.toFixed(4),b=+p.coords.longitude.toFixed(4);let best=null,bd=1e9;
    CT.forEach(c=>{const d=hav(a,b,c.a,c.b);if(d<bd){bd=d;best=c}});
    S.lat=a;S.lng=b;S.city=bd<=50?best.n:'My location';
-   $('city').value=S.city;$('lat').value=a;$('lng').value=b;st.textContent='';save();render()},
+   setCity(S.city);$('lat').value=a;$('lng').value=b;st.textContent='';save();render()},
   e=>{st.textContent=e.code===1?'Location permission was denied.':'Could not get your location.';tx()},
   {timeout:15000,maximumAge:60000})}}
 S.adj=S.adj||{};
