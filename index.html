@@ -250,6 +250,11 @@ main>[data-tab=qibla],main>[data-tab=set]{grid-column:1/-1;width:100%;max-width:
  <div class="f" style="margin-top:10px"><select id="agd" aria-label="Day"></select><select id="agm" aria-label="Month" style="flex:1.6"></select><input id="agy" type="number" inputmode="numeric" placeholder="Year" aria-label="Year" style="flex:1.2"></div>
  <label>Age on (Gregorian date, default today)</label><div class="f"><input id="ag2" type="date"><button id="agn" type="button" style="flex:0 0 auto">Today</button></div>
  <div id="ago" style="margin-top:12px"></div>
+ <label>Save this person (their age updates by itself every day)</label>
+ <div class="f"><input id="agname" placeholder="Name (e.g. Me, Amina)" maxlength="30" autocomplete="off"><button id="agsv" type="button" style="flex:0 0 auto">Save</button></div>
+ <div id="agms" class="mu"></div>
+ <label>Saved people</label>
+ <div id="agpl"></div>
 </details>
 <nav id="nav"><button data-t="home" class="on"><i>🏠</i><span>Home</span></button><button data-t="qibla"><i>🧭</i><span>Qibla</span></button><button data-t="cal"><i>📅</i><span>Calendar</span></button><button data-t="tools"><i></i><span>Tools</span></button><button data-t="set"><i>⚙️</i><span>Settings</span></button></nav>
 </main>
@@ -380,6 +385,7 @@ $('nx').onclick=()=>{const h=hp(anchor);anchor=addDays(anchor,31-h.day);renderCa
 function load(){setCity(S.city);$('lat').value=S.lat;$('lng').value=S.lng;$('me').value=S.me;$('as').value=S.as;$('fm').value=S.fm;$('ha').value=String(S.ha||0)}
 function upd(){const a=parseFloat($('lat').value),b=parseFloat($('lng').value);
  if(!isNaN(a)&&!isNaN(b)&&Math.abs(a)<=90&&Math.abs(b)<=180){S.lat=a;S.lng=b}
+ $('lat').value=S.lat;$('lng').value=S.lng; // snap back if the typed value was invalid
  S.me=$('me').value;S.as=+$('as').value;S.fm=$('fm').value;save();render()}
 ['lat','lng','me','as','fm'].forEach(i=>$(i).addEventListener('change',upd));
 const CT=('Borama (Awdal),9.9361,43.1828;Zeila (Awdal),11.3547,43.4744;Lughaya (Awdal),10.7186,43.9364;Baki (Awdal),10.4,43.3;Hargeisa,9.56,44.065;Berbera,10.4396,45.0143;Burao,9.5221,45.5336;Djibouti,11.5721,43.1456;Makkah,21.4225,39.8262;Madinah,24.4686,39.6142;Riyadh,24.7136,46.6753;Jeddah,21.4858,39.1925;Dubai,25.2048,55.2708;Abu Dhabi,24.4539,54.3773;Doha,25.2854,51.531;Kuwait City,29.3759,47.9774;Manama,26.2285,50.586;Muscat,23.588,58.3829;Sanaa,15.3694,44.191;Baghdad,33.3152,44.3661;Amman,31.9454,35.9284;Jerusalem,31.7683,35.2137;Gaza,31.5017,34.4668;Beirut,33.8938,35.5018;Damascus,33.5138,36.2765;Istanbul,41.0082,28.9784;Ankara,39.9334,32.8597;Tehran,35.6892,51.389;Cairo,30.0444,31.2357;Alexandria,31.2001,29.9187;Khartoum,15.5007,32.5599;Tripoli,32.8872,13.1913;Tunis,36.8065,10.1815;Algiers,36.7538,3.0588;Casablanca,33.5731,-7.5898;Rabat,34.0209,-6.8416;Nouakchott,18.0735,-15.9582;Dakar,14.7167,-17.4677;Lagos,6.5244,3.3792;Abuja,9.0765,7.3986;Kano,12.0022,8.592;Accra,5.6037,-0.187;Addis Ababa,9.03,38.74;Mogadishu,2.0469,45.3182;Nairobi,-1.2921,36.8219;Dar es Salaam,-6.7924,39.2083;Johannesburg,-26.2041,28.0473;Cape Town,-33.9249,18.4241;Karachi,24.8607,67.0011;Lahore,31.5204,74.3587;Islamabad,33.6844,73.0479;Delhi,28.6139,77.209;Mumbai,19.076,72.8777;Hyderabad,17.385,78.4867;Dhaka,23.8103,90.4125;Kabul,34.5553,69.2075;Tashkent,41.2995,69.2401;Baku,40.4093,49.8671;Kuala Lumpur,3.139,101.6869;Singapore,1.3521,103.8198;Jakarta,-6.2088,106.8456;Manila,14.5995,120.9842;Bangkok,13.7563,100.5018;Beijing,39.9042,116.4074;Tokyo,35.6762,139.6503;Sydney,-33.8688,151.2093;Melbourne,-37.8136,144.9631;London,51.5072,-0.1276;Birmingham,52.4862,-1.8904;Manchester,53.4808,-2.2426;Dublin,53.3498,-6.2603;Paris,48.8566,2.3522;Marseille,43.2965,5.3698;Brussels,50.8503,4.3517;Amsterdam,52.3676,4.9041;Berlin,52.52,13.405;Frankfurt,50.1109,8.6821;Madrid,40.4168,-3.7038;Rome,41.9028,12.4964;Vienna,48.2082,16.3738;Stockholm,59.3293,18.0686;Oslo,59.9139,10.7522;Copenhagen,55.6761,12.5683;Sarajevo,43.8563,18.4131;Moscow,55.7558,37.6173;New York,40.7128,-74.006;Washington DC,38.9072,-77.0369;Chicago,41.8781,-87.6298;Houston,29.7604,-95.3698;Dallas,32.7767,-96.797;Los Angeles,34.0522,-118.2437;San Francisco,37.7749,-122.4194;Detroit,42.3314,-83.0458;Toronto,43.6532,-79.3832;Montreal,45.5019,-73.5674;Vancouver,49.2827,-123.1207;Mexico City,19.4326,-99.1332;Sao Paulo,-23.5505,-46.6333').split(';').map(s=>{const p=s.split(',');return{n:p[0],a:+p[1],b:+p[2]}});
@@ -442,7 +448,7 @@ function conv0(s,lg){const t=s.trim(),x=XX[lg][t];if(x)return s.replace(t,x);con
  RX.forEach(r=>{s=s.replace(r[0],r[i])});
  tb.forEach(r=>{if(s.indexOf(r[0])>=0)s=s.split(r[0]).join(r[1])});return s}
 function tx(){const lg=S.lg||'en',w=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT);let n;
- while(n=w.nextNode()){const s=n.nodeValue;if(!s.trim())continue;const src=(n._t!==undefined&&s===n._t)?n._o:s;const out=lg==='en'?src:conv(src,lg);if(out!==s)n.nodeValue=out;n._o=src;n._t=out}}
+ while(n=w.nextNode()){const s=n.nodeValue;if(!s.trim()||(n.parentElement&&n.parentElement.closest('[translate="no"]')))continue;const src=(n._t!==undefined&&s===n._t)?n._o:s;const out=lg==='en'?src:conv(src,lg);if(out!==s)n.nodeValue=out;n._o=src;n._t=out}}
 function applyLg(){const lg=S.lg||'en';document.documentElement.lang=lg;document.documentElement.dir=lg==='ar'?'rtl':'ltr';tx()}
 $('lg').value=S.lg||'en';
 $('lg').addEventListener('change',()=>{S.lg=$('lg').value;save();applyLg();render();renderCal();renderTT();tx()});
@@ -531,6 +537,46 @@ function agCalc(){const o=$('ago'),dd=+$('agd').value,mm=+$('agm').value,yy=+$('
 document.querySelectorAll('#agt button').forEach(b=>b.onclick=()=>{agC=b.dataset.c;document.querySelectorAll('#agt button').forEach(x=>x.classList.toggle('act',x===b));agFill();agCalc()});
 $('ag2').value=iso(new Date());$('agn').onclick=()=>{$('ag2').value=iso(new Date());agCalc()};
 ['agd','agm','agy','ag2'].forEach(i=>{$(i).addEventListener('change',agCalc);$(i).addEventListener('input',agCalc)});agFill();agCalc();
+
+// ---------- Saved people (ages update automatically) ----------
+S.pp=(Array.isArray(S.pp)?S.pp:[]).filter(q=>q&&typeof q.n==='string'&&(q.c==='g'||q.c==='h')&&+q.d&&+q.m&&+q.y).slice(0,30);
+function agOk(c,dd,mm,yy){if(!dd||!mm||!yy)return null;
+ if(c==='h'){const gb=h2g(yy,mm,dd);return(!gb||yy<1300||yy>1600)?null:{gb,hb:{year:yy,month:mm,day:dd}}}
+ const gb=new Date(yy,mm-1,dd,12);return(yy<1000||gb.getMonth()!==mm-1)?null:{gb,hb:hp(gb)}}
+function pAge(q,end){const r=agOk(q.c,+q.d,+q.m,+q.y);if(!r)return null;const{gb,hb}=r;if(gb>end)return{fut:1,gb};
+ let y=end.getFullYear()-gb.getFullYear(),m=end.getMonth()-gb.getMonth(),d=end.getDate()-gb.getDate();
+ if(d<0){m--;d+=new Date(end.getFullYear(),end.getMonth(),0).getDate()}if(m<0){y--;m+=12}
+ const he=hp(end);let hy=he.year-hb.year,hm=he.month-hb.month,hd=he.day-hb.day;
+ if(hd<0){hm--;hd+=hp(addDays(end,-he.day)).day}if(hm<0){hy--;hm+=12}
+ let g=new Date(end.getFullYear(),gb.getMonth(),gb.getDate(),12);if(g<end)g=new Date(end.getFullYear()+1,gb.getMonth(),gb.getDate(),12);
+ return{y,m,d,hy,hm,hd,nb:Math.round((g-end)/864e5),gb}}
+function agLoad(q){agC=q.c;document.querySelectorAll('#agt button').forEach(x=>x.classList.toggle('act',x.dataset.c===q.c));agFill();
+ $('agd').value=q.d;$('agm').value=q.m;$('agy').value=q.y;$('agname').value=q.n;$('agms').textContent='';agCalc();$('ago').scrollIntoView({block:'nearest'})}
+let ppSig='';
+function renderPeople(){const bx=$('agpl'),end=new Date();end.setHours(12,0,0,0);
+ const sig=JSON.stringify([S.pp,iso(end),S.ha]);if(sig===ppSig)return;ppSig=sig;bx.textContent='';
+ if(!S.pp.length){const e=document.createElement('div');e.className='mu';e.textContent='Nobody saved yet. Fill in a birth date above, add a name and tap Save.';bx.appendChild(e);return}
+ S.pp.forEach(q=>{const a=pAge(q,end),w=document.createElement('div');w.className='row';w.style.cssText='align-items:center;gap:8px';
+  const l=document.createElement('div');l.style.cssText='flex:1;min-width:0;cursor:pointer';l.setAttribute('role','button');l.tabIndex=0;l.title='Tap to open in the calculator';
+  const nm=document.createElement('b');nm.setAttribute('translate','no');nm.textContent=q.n;nm.style.cssText='display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';l.appendChild(nm);
+  const bn=document.createElement('small');bn.style.cssText=SM+';text-align:left';bn.textContent=a?'Born '+gf(a.gb):'Invalid date';l.appendChild(bn);
+  l.onclick=()=>agLoad(q);l.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();agLoad(q)}};
+  const r=document.createElement('div');r.style.cssText='text-align:right;flex:none';
+  if(!a){r.textContent='\u2014'}else if(a.fut){r.textContent='Not born yet'}
+  else{r.textContent=a.y+'y '+a.m+'m '+a.d+'d';
+   const h=document.createElement('small');h.style.cssText=SM;h.textContent='Hijri '+a.hy+'y '+a.hm+'m '+a.hd+'d';r.appendChild(h);
+   const b=document.createElement('small');b.style.cssText=SM;b.textContent=a.nb===0?'\u{1F382} Birthday today!':'\u{1F382} in '+a.nb+(a.nb===1?' day':' days');r.appendChild(b)}
+  const x=document.createElement('button');x.type='button';x.textContent='\u2715';x.setAttribute('aria-label','Delete '+q.n);x.style.cssText='flex:none;padding:6px 10px';
+  x.onclick=()=>{S.pp=S.pp.filter(z=>z.id!==q.id);save();renderPeople()};
+  w.append(l,r,x);bx.appendChild(w)})}
+$('agsv').onclick=()=>{const ms=$('agms'),dd=+$('agd').value,mm=+$('agm').value,yy=+$('agy').value;
+ if(!agOk(agC,dd,mm,yy)){ms.textContent='Pick a valid birth date first.';return}
+ const n=($('agname').value.trim()||'Person').slice(0,30),i=S.pp.findIndex(z=>z.n.toLowerCase()===n.toLowerCase());
+ if(i<0&&S.pp.length>=30){ms.textContent='You can save up to 30 people. Delete one first.';return}
+ const rec={id:i>=0?S.pp[i].id:'p'+Date.now(),n,c:agC,d:dd,m:mm,y:yy};
+ if(i>=0)S.pp[i]=rec;else S.pp.push(rec);save();ms.textContent=i>=0?'Updated '+n+'.':'Saved '+n+'.';$('agname').value='';renderPeople()};
+{const _r3=render;render=function(){_r3();renderPeople()}}
+renderPeople();
 load();render();renderCal();applyLg();
 let lastK=Math.floor(Date.now()/6e4);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){lastK=Math.floor(Date.now()/6e4);render()}});
