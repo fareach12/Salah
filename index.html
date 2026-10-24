@@ -106,7 +106,8 @@ main>.card:nth-child(2) .nn{color:#fff;opacity:.95}
 #nav button i{font-size:0;display:block}
 button,summary{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 html,body{overscroll-behavior:none}
-body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body{-webkit-user-select:text;user-select:text}
+button,summary,#nav,.pill{-webkit-user-select:none;user-select:none}
 input,select{-webkit-user-select:text;user-select:text}
 #agt{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px;margin-top:10px}#agt button{border:0;background:transparent;border-radius:999px;padding:8px}#agt .act{background:var(--ac);color:#fff}#ago .row{flex-direction:column;gap:2px;padding:7px 8px}#ago .row span:first-child{color:var(--mu);font-size:.8rem}#ago .row span:last-child{font-weight:600}
 
@@ -140,6 +141,13 @@ main>[data-tab=qibla],main>[data-tab=set]{grid-column:1/-1;width:100%;max-width:
 
 #times .row.sr{margin:2px 18px;padding:6px 10px;background:transparent;border-radius:12px}
 #times .row.sr .ic{width:32px;height:32px;padding:7px;background:transparent;color:#c8962a;border:1.5px dashed var(--ln);margin-inline-end:10px}
+
+#times .row.sr{margin:4px 10px;padding:9px 12px;font-size:1rem;color:var(--tx);background:rgba(232,194,90,.14);box-shadow:inset 3px 0 0 #e8c25a;border-radius:14px}
+#times .row.sr.past{opacity:.8}
+#times .row.sr .ic{width:38px;height:38px;padding:8px;background:rgba(232,194,90,.28);color:#b8860b;border:0;margin-inline-end:12px}
+#times .row.sr span:first-of-type,#times .row.sr>span:nth-of-type(2){font-weight:500}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #times .row.sr .ic{color:#e8c25a}}
+:root[data-theme="dark"] #times .row.sr .ic{color:#e8c25a}
 </style>
 </head>
 <body>
@@ -457,6 +465,8 @@ if(!M[S.me])S.me='MWL';
 $('ha').addEventListener('change',()=>{S.ha=+$('ha').value;save();evK='';render();renderCal()});
 const KS=[...document.querySelector('main').children].filter(k=>k.id!=='nav');
 KS.forEach((k,i)=>{k.dataset.tab=k.dataset.x||(i<6?'home':i===7?'qibla':i===10?'set':'cal');if(k.tagName==='DETAILS')k.open=true});
+// one card open at a time on tabs that hold several collapsible cards
+['cal','tools'].forEach(t=>{const g=KS.filter(k=>k.dataset.tab===t&&k.tagName==='DETAILS');g.forEach((k,i)=>{k.open=i===0;k.addEventListener('toggle',()=>{if(k.open)g.forEach(o=>{if(o!==k)o.open=false})})})});
 function showTab(t){curTab=t;if(t==='cal'&&ttDirty)renderTT();KS.forEach(k=>{k.style.display=k.dataset.tab===t?'':'none'});document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
 $('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 let curPh='',nextAtMs=0;
