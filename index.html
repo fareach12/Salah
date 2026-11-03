@@ -154,6 +154,50 @@ main>[data-tab=qibla],main>[data-tab=set]{grid-column:1/-1;width:100%;max-width:
 #times .row.sr span:first-of-type,#times .row.sr>span:nth-of-type(2){font-weight:500}
 @media(prefers-color-scheme:dark){:root:not([data-theme]) #times .row.sr .ic{color:#e8c25a}}
 :root[data-theme="dark"] #times .row.sr .ic,:root[data-theme="midnight"] #times .row.sr .ic,:root[data-theme="amethyst"] #times .row.sr .ic,:root[data-theme="espresso"] #times .row.sr .ic,:root[data-theme="black"] #times .row.sr .ic{color:#e8c25a}
+
+#qr{--gd:#b8892b;margin-bottom:14px}
+#qr h1,#qr h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;margin:0 0 10px}#qr h1{font-size:22px}#qr h2{font-size:18px;margin-top:22px}
+#qr .big{font:600 72px/1 Georgia,serif;color:var(--ac)}
+#qr .qrow{display:flex;gap:10px;align-items:center}#qr .qrow>*{flex:1}
+#qr .mut{color:var(--mu);font-size:.85rem}#qr .gd{color:var(--gd);font-weight:600}
+#qr button{width:100%;background:var(--ac);color:#fff;border:0;font-weight:600}
+#qr button.sec{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+#qr button.x{width:auto;padding:4px 10px;background:transparent;color:var(--mu);border:1px solid var(--ln);font-weight:400}
+#qr .f button{background:var(--bg);color:var(--tx);border:1px solid var(--ln);font-weight:400}#qr .f button.act{background:var(--ac);color:#fff;border-color:var(--ac)}
+#qr textarea{width:100%;height:110px;font:inherit;font-size:16px;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:10px}
+#qr .qcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+#qr .qcal .qhd{text-align:center;color:var(--mu);font-size:.75rem;padding:2px 0}
+#qr .qcal button.qd{width:100%;min-width:0;aspect-ratio:1/1.1;padding:2px 0;border-radius:12px;background:var(--bg);color:var(--tx);border:1px solid var(--ln);font-weight:500;font-size:.95rem;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+#qr .qcal button.qd small{font-size:.62rem;font-weight:700;opacity:.85}
+#qr .qcal button.qd.some{border-color:var(--gd)}
+#qr .qcal button.qd.l1{background:var(--hl)}
+#qr .qcal button.qd.l2{background:color-mix(in srgb,var(--ac) 45%,var(--card));color:var(--tx)}
+#qr .qcal button.qd.l3{background:var(--ac);color:#fff;border-color:var(--ac)}
+#qr .qcal button.qd.today{border:2px solid var(--gd)}
+#qr .qcal button.qd.sel{outline:2px solid var(--tx);outline-offset:-3px}
+#qr .bar{height:8px;background:var(--ln);border-radius:6px;overflow:hidden;margin:8px 0}
+#qr .bar i{display:block;height:100%;background:var(--ac)}
+#qr .jg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-bottom:6px}
+#qr .jg div{border:1px solid var(--ln);border-radius:10px;padding:6px 0;text-align:center;line-height:1.15;color:var(--tx)}
+#qr .jg div.dk{color:#fff}#qr .jg small{display:block;font-size:.62rem;opacity:.85}
+#qr{--qar:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic","Al Nile",serif}
+#qr .ar{font-family:var(--qar);font-size:1.8rem;line-height:1.6;direction:rtl;text-align:center;color:var(--ac)}
+:root[lang="ar"] #qr,:root[lang="ar"] #qr h1,:root[lang="ar"] #qr h2,:root[lang="ar"] #qr .big{font-family:var(--qar)}
+#qr button,#qr .qd{touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background-color .15s,transform .1s,border-color .15s}
+#qr button:active{transform:scale(.98)}#qr .qcal button.qd:active{transform:scale(.93)}
+#qr .f{gap:6px}#qr .f button{padding:9px 2px;font-size:.82rem;white-space:nowrap}
+#qr .qrow>.card{min-width:0;padding:12px}
+#qr .li{align-items:flex-start}#qr .li>span{min-width:0;overflow-wrap:anywhere}#qr .li button.x{flex:none;margin-top:2px}
+#qr select{text-overflow:ellipsis}
+#qr :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+@keyframes qin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes qgrow{from{width:0}}
+#qr .qv.in{animation:qin .24s ease-out}
+#qr .bar i{animation:qgrow .6s ease-out}
+@media(prefers-reduced-motion:reduce){#qr *{animation:none!important;transition:none!important}}
+#qr .err{color:#c0392b;font-size:.85rem;min-height:20px}
+#qr .li{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln);gap:8px}
+#qr table{width:100%;border-collapse:collapse;font-size:.9rem}#qr td,#qr th{padding:6px 4px;border-bottom:1px solid var(--ln);text-align:left}#qr tr.cur{background:var(--hl)}
 </style>
 </head>
 <body>
@@ -168,6 +212,7 @@ main>[data-tab=qibla],main>[data-tab=set]{grid-column:1/-1;width:100%;max-width:
 <symbol id="i-qibla" viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M16 8l-2 6-6 2 2-6z"/></symbol>
 <symbol id="i-cal" viewBox="0 0 24 24"><path d="M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4"/></symbol>
 <symbol id="i-tools" viewBox="0 0 24 24"><path d="M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z"/></symbol>
+<symbol id="i-quran" viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13C17 4 14 4.500 12 6z M12 6v13"/></symbol>
 <symbol id="i-set" viewBox="0 0 24 24"><path d="M4 7h10 M18 7h2 M4 17h2 M10 17h10 M16 5v4 M8 15v4"/></symbol>
 </defs></svg>
 <main>
@@ -256,7 +301,8 @@ main>[data-tab=qibla],main>[data-tab=set]{grid-column:1/-1;width:100%;max-width:
  <label>Saved people</label>
  <div id="agpl"></div>
 </details>
-<nav id="nav"><button data-t="home" class="on"><i>🏠</i><span>Home</span></button><button data-t="qibla"><i>🧭</i><span>Qibla</span></button><button data-t="cal"><i>📅</i><span>Calendar</span></button><button data-t="tools"><i></i><span>Tools</span></button><button data-t="set"><i>⚙️</i><span>Settings</span></button></nav>
+<div id="qr" data-x="quran"></div>
+<nav id="nav"><button data-t="home" class="on"><i>🏠</i><span>Home</span></button><button data-t="quran"><i></i><span>Quran</span></button><button data-t="qibla"><i>🧭</i><span>Qibla</span></button><button data-t="cal"><i>📅</i><span>Calendar</span></button><button data-t="tools"><i></i><span>Tools</span></button><button data-t="set"><i>⚙️</i><span>Settings</span></button></nav>
 </main>
 <script>
 const $=id=>document.getElementById(id);
@@ -478,7 +524,7 @@ $('ha').addEventListener('change',()=>{S.ha=+$('ha').value;save();evK='';render(
 const KS=[...document.querySelector('main').children].filter(k=>k.id!=='nav');
 KS.forEach((k,i)=>{k.dataset.tab=k.dataset.x||(i<6?'home':i===7?'qibla':i===10?'set':'cal');if(k.tagName==='DETAILS')k.open=true});
 // each collapsible card opens/closes independently; only the first card per tab starts open
-['cal','tools'].forEach(t=>{KS.filter(k=>k.dataset.tab===t&&k.tagName==='DETAILS').forEach((k,i)=>{k.open=i===0})});
+/* all cards stay open; only Advanced: coordinates is collapsed */
 function showTab(t){curTab=t;if(t==='cal'&&ttDirty)renderTT();KS.forEach(k=>{k.style.display=k.dataset.tab===t?'':'none'});document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
 $('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 let curPh='',nextAtMs=0;
@@ -583,5 +629,181 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden){lastK=Mat
 setInterval(()=>{const n=Date.now(),k=Math.floor(n/6e4);if(k!==lastK||(nextAtMs&&n>=nextAtMs)){lastK=k;render()}},1000);
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
+<script>(function(){
+const N="Al-Fatihah,Al-Baqarah,Ali Imran,An-Nisa,Al-Maidah,Al-Anam,Al-Araf,Al-Anfal,At-Tawbah,Yunus,Hud,Yusuf,Ar-Rad,Ibrahim,Al-Hijr,An-Nahl,Al-Isra,Al-Kahf,Maryam,Ta-Ha,Al-Anbiya,Al-Hajj,Al-Muminun,An-Nur,Al-Furqan,Ash-Shuara,An-Naml,Al-Qasas,Al-Ankabut,Ar-Rum,Luqman,As-Sajdah,Al-Ahzab,Saba,Fatir,Ya-Sin,As-Saffat,Sad,Az-Zumar,Ghafir,Fussilat,Ash-Shura,Az-Zukhruf,Ad-Dukhan,Al-Jathiyah,Al-Ahqaf,Muhammad,Al-Fath,Al-Hujurat,Qaf,Adh-Dhariyat,At-Tur,An-Najm,Al-Qamar,Ar-Rahman,Al-Waqiah,Al-Hadid,Al-Mujadilah,Al-Hashr,Al-Mumtahanah,As-Saff,Al-Jumuah,Al-Munafiqun,At-Taghabun,At-Talaq,At-Tahrim,Al-Mulk,Al-Qalam,Al-Haqqah,Al-Maarij,Nuh,Al-Jinn,Al-Muzzammil,Al-Muddaththir,Al-Qiyamah,Al-Insan,Al-Mursalat,An-Naba,An-Naziat,Abasa,At-Takwir,Al-Infitar,Al-Mutaffifin,Al-Inshiqaq,Al-Buruj,At-Tariq,Al-Ala,Al-Ghashiyah,Al-Fajr,Al-Balad,Ash-Shams,Al-Layl,Ad-Duha,Ash-Sharh,At-Tin,Al-Alaq,Al-Qadr,Al-Bayyinah,Az-Zalzalah,Al-Adiyat,Al-Qariah,At-Takathur,Al-Asr,Al-Humazah,Al-Fil,Quraysh,Al-Maun,Al-Kawthar,Al-Kafirun,An-Nasr,Al-Masad,Al-Ikhlas,Al-Falaq,An-Nas".split(",");
+const C=[7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+const CUM=[0];C.forEach((c,i)=>CUM.push(CUM[i]+c));
+const abs=(s,a)=>CUM[s-1]+a;
+const fromAbs=n=>{let s=1;while(s<114&&CUM[s]<n)s++;return[s,n-CUM[s-1]]};
+const idx=(L,n)=>{let r=1;L.forEach((p,i)=>{if(abs(p[0],p[1])<=n)r=i+1});return r};
+const PG=[0,1,8,13,24,32,37,45,56,65,69,77,84,91,96,101,109,113,120,127,134,142,149,153,161,171,177,184,189,194,198,204,210,218,223,227,232,238,241,245,253,256,260,264,267,272,277,282,289,290,294,303,309,316,323,331,339,346,355,364,371,377,385,394,402,409,415,426,434,442,447,451,459,467,474,480,488,494,500,505,508,513,517,520,527,531,538,545,553,559,568,573,580,585,588,595,599,607,615,621,628,634,641,648,656,664,669,672,675,679,683,687,693,701,706,711,715,720,727,734,740,746,752,759,765,773,778,783,790,798,808,817,825,834,842,849,858,863,871,880,884,891,900,908,914,921,927,932,936,941,947,955,966,977,985,992,998,1006,1012,1022,1028,1036,1042,1050,1059,1075,1085,1092,1098,1104,1110,1114,1118,1125,1133,1142,1150,1161,1169,1177,1186,1194,1201,1206,1213,1222,1230,1236,1242,1249,1256,1262,1267,1272,1276,1283,1290,1297,1304,1308,1315,1322,1329,1335,1342,1347,1353,1358,1365,1371,1379,1385,1390,1398,1407,1418,1426,1435,1443,1453,1462,1471,1479,1486,1493,1502,1511,1519,1527,1536,1545,1555,1562,1571,1582,1591,1601,1611,1619,1627,1634,1640,1649,1660,1666,1675,1683,1692,1700,1708,1713,1721,1726,1736,1742,1750,1756,1761,1769,1775,1784,1793,1803,1818,1834,1854,1873,1893,1908,1916,1928,1936,1944,1956,1966,1974,1981,1989,1995,2004,2012,2020,2030,2037,2047,2057,2068,2079,2088,2096,2105,2116,2126,2134,2145,2156,2161,2168,2175,2186,2194,2202,2215,2224,2238,2251,2262,2276,2289,2302,2315,2327,2346,2361,2386,2400,2413,2425,2436,2447,2462,2474,2484,2494,2508,2519,2528,2541,2556,2565,2574,2585,2596,2601,2611,2619,2626,2634,2642,2651,2660,2668,2674,2691,2701,2716,2733,2748,2763,2778,2792,2802,2812,2819,2823,2828,2835,2845,2850,2853,2858,2867,2876,2888,2899,2911,2923,2933,2952,2972,2993,3016,3044,3069,3092,3116,3139,3160,3173,3182,3195,3204,3215,3223,3236,3248,3258,3266,3274,3281,3288,3296,3303,3312,3323,3330,3337,3347,3355,3364,3371,3379,3386,3393,3404,3415,3425,3434,3442,3451,3460,3470,3481,3489,3498,3504,3515,3524,3534,3540,3549,3556,3564,3569,3577,3584,3588,3596,3607,3614,3621,3629,3638,3646,3655,3664,3672,3679,3691,3699,3705,3718,3733,3746,3760,3776,3789,3813,3840,3865,3891,3915,3942,3971,3987,3997,4013,4032,4054,4064,4069,4080,4090,4099,4106,4115,4126,4133,4141,4150,4159,4167,4174,4183,4192,4200,4211,4219,4230,4239,4248,4257,4265,4273,4283,4288,4295,4304,4317,4324,4336,4348,4359,4373,4386,4399,4415,4433,4454,4474,4487,4496,4506,4516,4525,4531,4539,4546,4557,4565,4575,4584,4593,4599,4607,4612,4617,4624,4631,4646,4666,4682,4706,4727,4750,4767,4785,4811,4829,4853,4874,4896,4918,4942,4969,4996,5030,5056,5079,5087,5094,5100,5105,5111,5116,5126,5130,5136,5143,5151,5156,5162,5169,5178,5186,5193,5200,5209,5218,5223,5230,5237,5242,5254,5268,5287,5314,5332,5358,5386,5415,5430,5448,5461,5476,5495,5513,5543,5571,5597,5617,5642,5673,5703,5728,5759,5801,5830,5855,5883,5910,5932,5964,5994,6017,6044,6073,6099,6126,6138,6156,6177,6194,6208,6222,6237];
+const HQ=[0,1,33,51,67,82,99,113,131,149,165,184,196,210,226,240,250,260,270,279,290,308,326,345,368,386,406,426,446,464,479,494,505,517,529,551,567,581,593,607,628,641,656,670,681,696,710,720,736,751,766,778,802,825,848,863,884,900,916,930,940,955,985,1001,1019,1042,1071,1096,1110,1125,1143,1161,1182,1201,1221,1236,1254,1269,1281,1295,1310,1328,1346,1357,1375,1390,1417,1435,1454,1479,1497,1514,1534,1557,1581,1603,1626,1649,1673,1697,1712,1726,1742,1760,1778,1803,1852,1902,1931,1952,1976,1991,2012,2030,2052,2079,2099,2128,2157,2172,2191,2215,2239,2272,2309,2349,2403,2431,2459,2484,2512,2534,2566,2596,2614,2633,2655,2674,2709,2748,2792,2812,2826,2844,2856,2876,2908,2933,2984,3043,3113,3160,3186,3215,3241,3264,3281,3303,3328,3341,3366,3386,3410,3440,3463,3491,3514,3534,3551,3564,3584,3593,3616,3630,3652,3675,3701,3733,3765,3810,3871,3933,3991,4022,4066,4090,4111,4134,4154,4174,4199,4227,4243,4265,4285,4299,4323,4349,4382,4431,4485,4511,4531,4555,4578,4601,4613,4626,4657,4706,4759,4810,4855,4902,4980,5054,5091,5105,5118,5137,5157,5178,5192,5218,5230,5242,5272,5324,5394,5448,5495,5552,5610,5673,5759,5830,5885,5949,6024,6091,6155,6237];
+const H=[...Array(60)].map((_,k)=>fromAbs(HQ[4*k+1]));
+const J=H.filter((_,i)=>i%2===0);
+const pageOf=n=>{let lo=1,hi=604;while(lo<hi){const m=(lo+hi+1)>>1;if(PG[m]<=n)lo=m;else hi=m-1}return lo};
+const fmt=x=>String(Math.round(x*10)/10);
+const pgw=l=>{const x=abs(l.s[0],l.s[1]),y=abs(l.e[0],l.e[1]);let f=0;for(let p=pageOf(x);p<=pageOf(y);p++){const lo=Math.max(x,PG[p]),hi=Math.min(y,PG[p+1]-1);f+=(hi-lo+1)/(PG[p+1]-PG[p])}return f};
+const rng=(s,a,e,b)=>s===e?N[s-1]+" "+s+":"+a+(b>a?"–"+b:""):N[s-1]+" "+s+":"+a+" → "+N[e-1]+" "+e+":"+b;
+const facts=l=>{const p1=pageOf(abs(l.s[0],l.s[1])),p2=pageOf(abs(l.e[0],l.e[1]));return l.n+" ayahs · Page "+p1+(p2>p1?"–"+p2:"")+" of 604 · about "+fmt(pgw(l))+(pgw(l)>1.05?" pages":" page")+" · Juz "+span(J,...l.s,...l.e)+" · Hizb "+span(H,...l.s,...l.e)};
+const validate=(s1,a1,s2,a2)=>{
+ for(const[s,a]of[[s1,a1],[s2,a2]]){if(!Number.isInteger(a)||a<1)return"Enter a whole ayah number.";if(a>C[s-1])return N[s-1]+" has only "+C[s-1]+" ayahs.";}
+ if(abs(s2,a2)<abs(s1,a1))return"The end must come after the start.";return""};
+const count=(s1,a1,s2,a2)=>abs(s2,a2)-abs(s1,a1)+1;
+const span=(L,s1,a1,s2,a2)=>{const x=idx(L,abs(s1,a1)),y=idx(L,abs(s2,a2));return x===y?""+x:x+"–"+y};
+
+const KEY="salah.quran.v1";let mem=null;
+const def={logs:[],set:{min:1,grace:true,edit:7,remind:"20:00"}};
+function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return mem||structuredClone(def)}
+let S=load();
+function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const pad=n=>String(n).padStart(2,"0");
+const dstr=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const today=()=>dstr(new Date());
+const addDays=(s,n)=>{const d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return dstr(d)};
+const totals=()=>{const t={};S.logs.forEach(l=>t[l.date]=(t[l.date]||0)+l.n);return t};
+function next(){ // position after the most recently saved log
+ if(!S.logs.length)return[1,1];const l=S.logs.reduce((a,b)=>b.at>a.at?b:a);
+ const n=abs(l.e[0],l.e[1])+1;return n>6236?[1,1]:fromAbs(n)}
+function streak(){
+ const t=totals(),min=S.set.min,ds=Object.keys(t).sort();if(!ds.length)return 0;
+ let d=today();if((t[d]||0)<min)d=addDays(d,-1);
+ let k=0,cool=0;
+ while(d>=ds[0]){
+  if((t[d]||0)>=min)k++;else if(S.set.grace&&cool===0)cool=8;else break;
+  if(cool>0)cool--;d=addDays(d,-1)}
+ return k}
+
+let view="home",cal=new Date(),flash="",sel=null,logDate=null,anim=false;
+const root=document.getElementById("qr");const $=s=>root.querySelector(s);
+function go(v){const ch=v!==view;view=v;anim=ch;render();if(ch)scrollTo(0,0)}
+const pos=(s,a)=>N[s-1]+" "+s+":"+a;
+const opts=sel=>N.map((n,i)=>`<option value="${i+1}"${i+1===sel?" selected":""}>${i+1}. ${n} — ${AR[i]}</option>`).join("");
+function render(){
+ const tabs=[["home","Today"],["log","Log"],["calendar","Calendar"],["ref","Progress"],["settings","More"]];
+ const f={home,log,calendar,ref,settings}[view]||home;
+ root.innerHTML=`<div class="f" style="margin-bottom:12px;flex-wrap:wrap">${tabs.map(([k,l])=>`<button type="button" data-v="${k}" class="${k===view?"act":""}">${l}</button>`).join("")}</div>`+`<div class="qv${anim?" in":""}">`+f()+"</div>";anim=false;if(view==="home")flash="";
+ if(view==="log")bindLog();if(view==="settings")bindSet();if(view==="calendar")bindCal();if(view==="ref")bindRef()}
+root.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b)go(b.dataset.v)});
+document.getElementById("nav").addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.t==="quran"){flash="";anim=true;render()}});
+const JS=J.map(p=>abs(p[0],p[1])),JE=J.map((p,i)=>i<29?JS[i+1]-1:6236);
+function cover(){const c=new Uint8Array(6238);for(let i=1;i<=Math.min(S.set.base||0,6236);i++)c[i]=1;
+ S.logs.forEach(l=>{if(l.t==="rev")return;const x=abs(l.s[0],l.s[1]),y=abs(l.e[0],l.e[1]);for(let i=x;i<=y;i++)c[i]=1});return c}
+function stats(){const c=cover();let n=0;for(let i=1;i<=6236;i++)n+=c[i];
+ const jf=J.map((_,k)=>{let m=0;for(let i=JS[k];i<=JE[k];i++)m+=c[i];return m/(JE[k]-JS[k]+1)});return{n,pct:n/6236*100,jf}}
+const juzDone=()=>new Set(stats().jf.map((f,i)=>f>=1?i+1:0).filter(Boolean));
+function bestStreak(){const t=totals(),ds=Object.keys(t).sort();if(!ds.length)return 0;let run=0,best=0;
+ for(let d=ds[0];d<=today();d=addDays(d,1)){if((t[d]||0)>=S.set.min){run++;best=Math.max(best,run)}else run=0}return best}
+function planInfo(st){const p=S.set.plan;if(!p)return"";
+ const used=Math.max(0,Math.round((new Date(today()+"T12:00:00")-new Date(p.start+"T12:00:00"))/864e5)),left=Math.max(1,p.days-used),R=6236-st.n,end=addDays(p.start,p.days-1);
+ if(R<=0)return"Plan complete. Alhamdulillah.";const per=Math.ceil(R/left);
+ return`Plan: finish by ${dl(end)}. ${R} ayahs left and ${left} ${left>1?"days":"day"} to go, so about ${per} ayahs a day (around ${fmt(per*604/6236)} pages).`}
+const AR="الفاتحة,البقرة,آل عمران,النساء,المائدة,الأنعام,الأعراف,الأنفال,التوبة,يونس,هود,يوسف,الرعد,إبراهيم,الحجر,النحل,الإسراء,الكهف,مريم,طه,الأنبياء,الحج,المؤمنون,النور,الفرقان,الشعراء,النمل,القصص,العنكبوت,الروم,لقمان,السجدة,الأحزاب,سبأ,فاطر,يس,الصافات,ص,الزمر,غافر,فصلت,الشورى,الزخرف,الدخان,الجاثية,الأحقاف,محمد,الفتح,الحجرات,ق,الذاريات,الطور,النجم,القمر,الرحمن,الواقعة,الحديد,المجادلة,الحشر,الممتحنة,الصف,الجمعة,المنافقون,التغابن,الطلاق,التحريم,الملك,القلم,الحاقة,المعارج,نوح,الجن,المزمل,المدثر,القيامة,الإنسان,المرسلات,النبأ,النازعات,عبس,التكوير,الانفطار,المطففين,الانشقاق,البروج,الطارق,الأعلى,الغاشية,الفجر,البلد,الشمس,الليل,الضحى,الشرح,التين,العلق,القدر,البينة,الزلزلة,العاديات,القارعة,التكاثر,العصر,الهمزة,الفيل,قريش,الماعون,الكوثر,الكافرون,النصر,المسد,الإخلاص,الفلق,الناس".split(",");
+const clock24=()=>{try{return JSON.parse(localStorage.getItem("pt")||"{}").fm==="24"}catch(e){return false}};
+const tm=l=>l.at?new Date(l.at).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",hour12:!clock24()}):"";
+const dl=d=>new Date(d+"T12:00:00").toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
+const editable=d=>d>=addDays(today(),-S.set.edit)&&d<=today();
+function entry(l,del){const ty=l.t==="mem"?"Memorizing · ":l.t==="rev"?"Revising · ":"";return`<div class="li"><span><b>${rng(l.s[0],l.s[1],l.e[0],l.e[1])}</b><br><span class="mut">${facts(l)}</span><br><span class="mut">${ty}Written at ${tm(l)}${l.note?" · “"+l.note.replace(/[<>&]/g,"")+"”":""}</span></span>${del?`<button class="x" type="button" data-del="${l.id}">Delete</button>`:""}</div>`}
+function home(){
+ const t=totals(),td=t[today()]||0,[s,a]=next(),n=abs(s,a),st=stats();
+ const dl0=S.logs.filter(l=>l.date===today()),pw=dl0.reduce((x,l)=>x+pgw(l),0);
+ const wk=[...Array(7)].reduce((x,_,i)=>x+(t[addDays(today(),-i)]||0),0);
+ const mo=Object.entries(t).filter(([d])=>d.slice(0,7)===today().slice(0,7)).reduce((x,[,v])=>x+v,0);
+ return`<div class="card"><div class="mut">Ayahs read today</div><div class="big">${td}</div>
+ <div class="mut">${td?"About "+fmt(pw)+(pw>1.05?" pages. ":" page. "):""}${td>=S.set.min?"Today counts toward your streak.":"Read at least "+S.set.min+" to keep your streak."}</div></div>
+ <div class="qrow"><div class="card"><div class="gd" style="font-size:28px">${streak()}</div><div class="mut">day streak</div></div>
+ <div class="card"><div style="font-size:28px">${wk}</div><div class="mut">last 7 days</div></div>
+ <div class="card"><div style="font-size:28px">${mo}</div><div class="mut">this month</div></div></div>
+ <div class="card"><div class="mut">Quran completed</div><div style="font-size:28px;font-family:Georgia,serif">${fmt(st.pct)}%</div><div class="bar"><i style="width:${st.pct}%"></i></div><div class="mut">${6236-st.n} ayahs left${S.set.base||S.logs.length?"":". Set your starting point in Progress."}</div>${S.set.plan?`<div class="mut" style="margin-top:6px">${planInfo(st)}</div>`:""}</div>
+ <div class="card"><div class="mut">Continue from</div><div class="ar">${AR[s-1]}</div><div style="font-size:18px;font-family:Georgia,serif">${pos(s,a)}</div>
+ <div class="mut">Page ${pageOf(n)} of 604 · Juz ${idx(J,n)} · Hizb ${idx(H,n)}</div><br><button type="button" data-v="log">Log reading</button></div>${flash?`<p class="gd">${flash}</p>`:""}`}
+
+function log(){
+ const [s,a]=next(),tdy=today();
+ const days=[...Array(S.set.edit+1)].map((_,i)=>addDays(tdy,-i)),pick=days.includes(logDate)?logDate:tdy;
+ const recent=S.logs.filter(l=>l.date>=days[days.length-1]).sort((x,y)=>y.at-x.at);
+ return`<div class="card">
+ <label for="q_dt">Day</label><select id="q_dt">${days.map((d,i)=>`<option value="${d}"${d===pick?" selected":""}>${i?dl(d):"Today"}</option>`).join("")}</select>
+ <label>Start</label><div class="qrow"><select id="q_s1" style="flex:2">${opts(s)}</select><input id="q_a1" type="number" inputmode="numeric" min="1" value="${a}" aria-label="Start ayah"></div>
+ <label>End</label><div class="qrow"><select id="q_s2" style="flex:2">${opts(s)}</select><input id="q_a2" type="number" inputmode="numeric" min="1" placeholder="Ayah" aria-label="End ayah"></div>
+ <label for="q_ty">Type</label><select id="q_ty"><option value="read">Reading</option><option value="mem">Memorizing</option><option value="rev">Revising (not counted in completion)</option></select>
+ <label for="q_nt">Note (optional)</label><input id="q_nt" maxlength="80" placeholder="For example: after Fajr" autocomplete="off">
+ <div id="q_pv" class="mut" style="margin-top:10px;min-height:44px"></div><p id="q_er" class="err"></p><button id="q_sv" type="button">Save</button></div>
+ <h2>Recent entries</h2>${recent.length?recent.map(l=>entry(l,true)).join(""):'<p class="mut">Nothing logged yet. Pick where you stopped and add your end ayah.</p>'}`}
+function bindLog(){
+ const g=id=>$("#q_"+id),v=id=>+g(id).value;
+ const mk=()=>({s:[v("s1"),v("a1")],e:[v("s2"),v("a2")]});
+ const upd=()=>{const e=g("a2").value;if(!e){g("pv").textContent="";g("er").textContent="";return}
+  const err=validate(v("s1"),v("a1"),v("s2"),v("a2"));g("er").textContent=err;
+  if(err){g("pv").textContent="";return}
+  const l=mk();l.n=count(l.s[0],l.s[1],l.e[0],l.e[1]);g("pv").innerHTML="<b>"+rng(l.s[0],l.s[1],l.e[0],l.e[1])+"</b><br>"+facts(l)};
+ ["s1","a1","s2","a2"].forEach(i=>g(i).addEventListener("input",upd));
+ g("s1").addEventListener("change",()=>{if(!g("a2").value)g("s2").value=g("s1").value});
+ g("sv").onclick=()=>{const err=g("a2").value?validate(v("s1"),v("a1"),v("s2"),v("a2")):"Enter the end ayah.";
+  if(err){g("er").textContent=err;return}
+  const l=mk(),b4=juzDone(),n4=stats().n;
+  S.logs.push({id:Date.now()+""+Math.random().toString(36).slice(2,6),date:g("dt").value,s:l.s,e:l.e,n:count(l.s[0],l.s[1],l.e[0],l.e[1]),t:g("ty").value,note:g("nt").value.trim(),at:Date.now()});
+  const nw=[...juzDone()].filter(x=>!b4.has(x));
+  flash=stats().n>=6236&&n4<6236?"Khatma complete. Alhamdulillah.":nw.length?"Saved. Juz "+nw.join(", ")+" complete.":"Saved.";
+  logDate=null;save();go("home")};
+ bindDel()}
+function bindDel(){root.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{S.logs=S.logs.filter(l=>l.id!==b.dataset.del);save();render()})}
+
+function calendar(){
+ const y=cal.getFullYear(),m=cal.getMonth(),ym=y+"-"+pad(m+1),t=totals(),first=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),min=S.set.min;
+ if(!sel||sel.slice(0,7)!==ym)sel=today().slice(0,7)===ym?today():null;
+ let h=["Su","Mo","Tu","We","Th","Fr","Sa"].map(d=>`<div class="qhd">${d}</div>`).join("")+"<div></div>".repeat(first),days=0,tot=0;
+ for(let d=1;d<=dim;d++){const k=ym+"-"+pad(d),n=t[k]||0;if(n>=min)days++;tot+=n;
+  const c=n>=min*8?"l3":n>=min*3?"l2":n>=min?"l1":n?"some":"";
+  h+=`<button type="button" class="qd ${c}${k===today()?" today":""}${k===sel?" sel":""}" data-day="${k}" aria-label="${dl(k)}: ${n} ayahs"><span>${d}</span>${n?`<small>${n}</small>`:""}</button>`}
+ let det="";
+ if(sel){const ls=S.logs.filter(l=>l.date===sel).sort((x,y)=>x.at-y.at),pgs=new Set();
+  ls.forEach(l=>{for(let p=pageOf(abs(l.s[0],l.s[1]));p<=pageOf(abs(l.e[0],l.e[1]));p++)pgs.add(p)});
+  det=`<div class="card"><b>${dl(sel)}</b>${ls.length?`<div class="mut">${t[sel]} ayahs · ${pgs.size} ${pgs.size>1?"pages":"page"} touched</div>${ls.map(l=>entry(l,editable(sel))).join("")}`:'<p class="mut">Nothing logged on this day.</p>'}${editable(sel)?`<br><button type="button" class="sec" data-logday="${sel}">Log reading for this day</button>`:""}</div>`}
+ return`<div class="qrow" style="margin-bottom:10px"><button class="sec" type="button" id="q_pm" aria-label="Previous month" style="flex:0 0 52px">‹</button><b style="text-align:center">${cal.toLocaleString("en",{month:"long",year:"numeric"})}</b><button class="sec" type="button" id="q_nm" aria-label="Next month" style="flex:0 0 52px">›</button></div>
+ <div class="card"><div class="qcal">${h}</div><div class="mut" style="margin-top:10px">${days} days read · ${tot} ayahs. Darker boxes mean more ayahs. Tap a day for details.</div></div>${det}`}
+function bindCal(){
+ $("#q_pm").onclick=()=>{cal=new Date(cal.getFullYear(),cal.getMonth()-1,1);render()};
+ $("#q_nm").onclick=()=>{cal=new Date(cal.getFullYear(),cal.getMonth()+1,1);render()};
+ root.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{sel=b.dataset.day;render()});
+ root.querySelectorAll("[data-logday]").forEach(b=>b.onclick=()=>{logDate=b.dataset.logday;go("log")});
+ bindDel()}
+
+function ref(){
+ const st=stats(),[s,a]=next(),cur=idx(J,abs(s,a)),f=p=>p[0]+":"+p[1],pg=p=>pageOf(abs(p[0],p[1])),bs=S.set.base||0,p=S.set.plan;
+ const bsp=bs?fromAbs(bs):null;
+ return`<div class="card"><div class="mut">Quran completed</div><div class="big">${fmt(st.pct)}%</div><div class="bar"><i style="width:${st.pct}%"></i></div>
+ <div class="mut">${st.n} of 6236 ayahs done · ${6236-st.n} left. Revising and re-reading are not counted here.</div><div class="mut" style="margin-top:6px">Best streak: ${bestStreak()} days · Current: ${streak()}</div></div>
+ <div class="card"><b>Starting point</b><p class="mut">Already read part of the Quran before using this app? Set where you reached. Everything before it counts as done.${bsp?" Now: up to "+pos(bsp[0],bsp[1])+".":""}</p>
+ <div class="qrow"><select id="q_bs" style="flex:2">${opts(bsp?bsp[0]:1)}</select><input id="q_ba" type="number" inputmode="numeric" min="1" placeholder="Ayah" value="${bsp?bsp[1]:""}" aria-label="Last ayah read"></div>
+ <p id="q_be" class="err"></p><div class="qrow"><button type="button" id="q_bset">Save starting point</button><button type="button" class="sec" id="q_bclr">Clear</button></div></div>
+ <div class="card"><b>Finish plan</b><p class="mut">${p?planInfo(st):"Choose how many days you want to take to finish the Quran. Use 30 for Ramadan."}</p>
+ <label for="q_pd">Days to finish</label><input id="q_pd" type="number" inputmode="numeric" min="1" max="1000" value="${p?p.days:30}">
+ <br><br><div class="qrow"><button type="button" id="q_pset">${p?"Restart plan today":"Start plan today"}</button>${p?'<button type="button" class="sec" id="q_pclr">Remove plan</button>':""}</div></div>
+ <h2>Juz progress</h2><div class="jg">${st.jf.map((fr,i)=>`<div class="${fr>=.6?"dk":""}" style="background:color-mix(in srgb,var(--ac) ${Math.round(fr*100)}%,var(--card))"><b>${i+1}</b><small>${Math.floor(fr*100)}%</small></div>`).join("")}</div>
+ <h2>Juz and hizb</h2><p class="mut">Where each part starts. Your next ayah is in juz ${cur}. Pages follow the 604-page Madinah mushaf.</p>
+ <div class="card" style="overflow-x:auto"><table><tr><th>Juz</th><th>Starts</th><th>Page (of 604)</th><th>Hizb</th></tr>${J.map((p,i)=>`<tr class="${i+1===cur?"cur":""}"><td>${i+1}</td><td>${f(p)}</td><td>${pg(p)}</td><td>${2*i+1}, ${2*i+2} (${f(H[2*i+1])})</td></tr>`).join("")}</table></div>`}
+function bindRef(){
+ $("#q_bset").onclick=()=>{const s=+$("#q_bs").value,a=+$("#q_ba").value;
+  if(!Number.isInteger(a)||a<1||a>C[s-1]){$("#q_be").textContent=N[s-1]+" has "+C[s-1]+" ayahs. Enter a number from 1 to "+C[s-1]+".";return}
+  S.set.base=abs(s,a);save();render()};
+ $("#q_bclr").onclick=()=>{S.set.base=0;save();render()};
+ $("#q_pset").onclick=()=>{const d=Math.max(1,Math.min(1000,Math.round(+$("#q_pd").value)||30));S.set.plan={days:d,start:today()};save();render()};
+ const pc=$("#q_pclr");if(pc)pc.onclick=()=>{S.set.plan=null;save();render()}}
+
+function settings(){const s=S.set;
+ return`<div class="card"><b>Streak and entries</b>
+ <label for="q_mn">Daily minimum (ayahs) to keep the streak</label><input id="q_mn" type="number" min="1" value="${s.min}">
+ <label for="q_gr">Grace day (one missed day per week is forgiven)</label><select id="q_gr"><option value="1"${s.grace?" selected":""}>On</option><option value="0"${s.grace?"":" selected"}>Off</option></select>
+ <label for="q_ed">Days you can add or delete entries</label><select id="q_ed"><option${s.edit===3?" selected":""}>3</option><option${s.edit===7?" selected":""}>7</option></select></div>
+ <div class="card"><b>Reminders</b><p class="mut">Use Tools, then Reminders, to set a reading reminder, for example 10 minutes after Fajr with the label Read Quran.</p></div>
+ <div class="card"><b>Backup</b><p class="mut">Quran data is saved only on this phone. Copy it somewhere safe, and paste it back to restore.</p>
+ <textarea id="q_bk" aria-label="Backup data">${JSON.stringify(S)}</textarea><br><br><div class="qrow"><button class="sec" id="q_cb" type="button">Copy backup</button><button id="q_rs" type="button">Restore from text</button></div><p id="q_er" class="err"></p></div>`}
+function bindSet(){
+ const sv=()=>{S.set=Object.assign({},S.set,{min:Math.max(1,+$("#q_mn").value||1),grace:$("#q_gr").value==="1",edit:+$("#q_ed").value});save()};
+ ["q_mn","q_gr","q_ed"].forEach(i=>$("#"+i).addEventListener("change",sv));
+ $("#q_cb").onclick=async e=>{try{await navigator.clipboard.writeText($("#q_bk").value)}catch(x){$("#q_bk").select();try{document.execCommand("copy")}catch(_){}}e.target.textContent="Copied"};
+ $("#q_rs").onclick=()=>{try{const o=JSON.parse($("#q_bk").value);if(!Array.isArray(o.logs)||!o.set)throw 0;S=o;save();flash="Restored.";go("home")}catch(e){$("#q_er").textContent="That text is not a valid backup."}}}
+view="home";render();
+})();</script>
 </body>
 </html>
