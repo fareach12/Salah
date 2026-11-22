@@ -1,5 +1,5 @@
 import {$,addDays} from '../core/dom.js';
-import {lab,pt} from '../core/prayer.js';
+import {cityDay,lab,pt} from '../core/prayer.js';
 import {S,save} from '../core/store.js';
 import {tx} from '../core/i18n.js';
 import {on} from '../core/bus.js';
@@ -51,7 +51,7 @@ async function fire(n,d){const ok=play(n,d);banner(n,d);try{navigator.vibrate&&n
 // Once per prayer per day, and only within 90 s of the time: an adhan that is minutes late is not played.
 function chk(){const now=new Date(),dk=now.toDateString();
  for(const k in S.af)if(S.af[k]!==dk)delete S.af[k];
- PR.forEach(n=>{if(!S.ad[n]||S.af[n]===dk)return;const p=pt(now,n);if(!p)return;const df=now-p;if(df>=0&&df<9e4){S.af[n]=dk;save();fire(n,now)}})}
+ PR.forEach(n=>{if(!S.ad[n]||S.af[n]===dk)return;const p=pt(cityDay(now),n);if(!p)return;const df=now-p;if(df>=0&&df<9e4){S.af[n]=dk;save();fire(n,now)}})}
 // --- settings card
 const adn=$('adn');
 adn.innerHTML=PR.map(n=>`<button type="button" data-n="${n}" aria-pressed="false">${n}</button>`).join('');
@@ -68,7 +68,7 @@ $('adr').onclick=async()=>{try{await dbDel()}catch(x){}S.adf='';save();ready=nul
 // Own timer: wakes right at the next adhan time (also while the page is in the background), so it never waits for the screen refresh.
 let tm=0;
 function arm(){clearTimeout(tm);const now=new Date();let w=3e4;
- PR.forEach(n=>{if(!S.ad[n])return;[0,1].forEach(o=>{const p=pt(addDays(now,o),n);if(p&&p>now)w=Math.min(w,p-now)})});
+ PR.forEach(n=>{if(!S.ad[n])return;[0,1].forEach(o=>{const p=pt(addDays(cityDay(now),o),n);if(p&&p>now)w=Math.min(w,p-now)})});
  tm=setTimeout(()=>{chk();arm()},Math.max(20,w+15))}
 paint();idle();on('render',()=>{chk();arm()});arm();
 if(PR.some(n=>S.ad[n]))load(); // ready before the first prayer time

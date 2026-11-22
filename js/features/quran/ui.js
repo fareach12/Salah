@@ -80,13 +80,13 @@ function calendar(){
  let h=["Sa","Su","Mo","Tu","We","Th","Fr"].map(d=>`<div class="qhd">${d}</div>`).join("")+"<div></div>".repeat((first+1)%7),days=0,tot=0;
  for(let d=1;d<=dim;d++){const k=ym+"-"+pad(d),n=t[k]||0;if(n>=min)days++;tot+=n;
   const c=n>=min*8?"l3":n>=min*3?"l2":n>=min?"l1":n?"some":"";
-  h+=`<button type="button" class="qd ${c}${k===today()?" today":""}${k===sel?" sel":""}" data-day="${k}" aria-label="${dl(k)}: ${n} ayahs"><span>${d}</span><small class="qh">${hj(k).day}</small>${n?`<small>${n}</small>`:""}</button>`}
+  h+=`<button type="button" class="qd ${c}${k===today()?" today":""}${k===sel?" sel":""}" data-day="${k}" aria-label="${dl(k)}: ${n} ayahs"><span>${hj(k).day}</span><small class="qh">${d}</small>${n?`<small>${n}</small>`:""}</button>`}
  let det="";
  if(sel){const ls=Q.logs.filter(l=>l.date===sel).sort((x,y)=>x.at-y.at),pgs=new Set();
   ls.forEach(l=>{for(let p=pageOf(abs(l.s[0],l.s[1]));p<=pageOf(abs(l.e[0],l.e[1]));p++)pgs.add(p)});
   det=`<div class="card"><b>${dl(sel)}</b>${ls.length?`<div class="mu">${t[sel]} ayahs · ${pgs.size} ${pgs.size>1?"pages":"page"} touched</div>${ls.map(l=>entry(l,editable(sel))).join("")}`:'<p class="mu">Nothing logged on this day.</p>'}${editable(sel)?`<br><button type="button" class="sec" data-logday="${sel}">Log reading for this day</button>`:""}</div>`}
- return`<div class="qrow" style="margin-bottom:10px"><button class="sec" type="button" id="q_pm" aria-label="Previous month" style="flex:0 0 52px">‹</button><b style="text-align:center">${ld(cal,{month:"long",year:"numeric"})}<br><span class="mu" style="font-weight:400">${hmr(y,m,dim)}</span></b><button class="sec" type="button" id="q_nm" aria-label="Next month" style="flex:0 0 52px">›</button></div>
- <div class="card"><div class="qcal">${h}</div><div class="mu" style="margin-top:10px">${days} days read · ${tot} ayahs. Small number = Hijri day. Darker boxes mean more ayahs. Tap a day for details.</div></div>${det}`}
+ return`<div class="qrow" style="margin-bottom:10px"><button class="sec" type="button" id="q_pm" aria-label="Previous month" style="flex:0 0 52px">‹</button><b style="text-align:center">${hmr(y,m,dim)}<br><span class="mu" style="font-weight:400">${ld(cal,{month:"long",year:"numeric"})}</span></b><button class="sec" type="button" id="q_nm" aria-label="Next month" style="flex:0 0 52px">›</button></div>
+ <div class="card"><div class="qcal">${h}</div><div class="mu" style="margin-top:10px">${days} days read · ${tot} ayahs. Big number = Hijri day, small number = date. Darker boxes mean more ayahs. Tap a day for details.</div></div>${det}`}
 function bindCal(){
  qs("#q_pm").onclick=()=>{cal=new Date(cal.getFullYear(),cal.getMonth()-1,1);draw()};
  qs("#q_nm").onclick=()=>{cal=new Date(cal.getFullYear(),cal.getMonth()+1,1);draw()};

@@ -1,12 +1,12 @@
 import {S} from '../core/store.js';
-import {clk,eff,pt} from '../core/prayer.js';
+import {clk,eff,pt,tparts} from '../core/prayer.js';
 import {ld} from '../core/i18n.js';
 import {hp} from '../core/hijri.js';
 import {$} from '../core/dom.js';
 import {on} from '../core/bus.js';
 import {ui} from '../core/nav.js';
 let ttSig='',ttDirty=true,tmo=new Date();tmo=new Date(tmo.getFullYear(),tmo.getMonth(),1,12);
-const ft=d=>{if(!d)return'—';const h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');return S.fm==='24'?String(h).padStart(2,'0')+':'+m:(h%12||12)+':'+m};
+const ft=d=>{if(!d)return'—';const[h,mi]=tparts(d),m=String(mi).padStart(2,'0');return S.fm==='24'?String(h).padStart(2,'0')+':'+m:(h%12||12)+':'+m};
 function renderTT(){ttDirty=false;const y=tmo.getFullYear(),m=tmo.getMonth(),n=new Date(y,m+1,0).getDate(),nm=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'],td=eff().toDateString();
  let h='<table><tr><th>Date</th>'+nm.map(x=>`<th>${x}</th>`).join('')+'</tr>';
  for(let i=1;i<=n;i++){const d=new Date(y,m,i,12);

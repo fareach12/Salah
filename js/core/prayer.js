@@ -30,10 +30,18 @@ function calc(date){const sig=S.lat+','+S.lng+','+S.me+','+S.as+','+(S.ha||0);
  if(sig!==ckSig||Object.keys(CK).length>120){ckSig=sig;for(const k in CK)delete CK[k]}
  const k=date.getFullYear()*372+date.getMonth()*31+date.getDate();return CK[k]||(CK[k]=calc0(date))}
 const toDate=(base,h)=>isNaN(h)?null:new Date(base.getFullYear(),base.getMonth(),base.getDate(),0,Math.floor(h*60+1e-6),0);
-const fmt=d=>{if(!d)return'—';let h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');
+// Time zone of the chosen place (S.tz). '' or the device's own zone = plain device clock, nothing changes.
+const DZ=(()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){return''}})(),FZ={};
+const zf=z=>FZ[z]||(FZ[z]=new Intl.DateTimeFormat('en-GB',{timeZone:z,year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',hourCycle:'h23'}));
+function zp(d){const z=S.tz;if(!z||z===DZ)return null;try{const o={};zf(z).formatToParts(d).forEach(p=>o[p.type]=+p.value);o.hour%=24;return o}catch(e){return null}}
+const tparts=d=>{const o=zp(d);return o?[o.hour,o.minute]:[d.getHours(),d.getMinutes()]}; // hour and minute on the clock of the chosen place
+const cityDay=d=>{const o=zp(d);return o?new Date(o.year,o.month-1,o.day,12):new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)}; // the calendar date there
+function zoneTag(){const n=new Date(),o=zp(n);if(!o)return'';const off=Math.round((Date.UTC(o.year,o.month-1,o.day,o.hour,o.minute)-Math.floor(n/6e4)*6e4)/6e4);
+ if(off===-n.getTimezoneOffset())return'';const a=Math.abs(off);return'UTC'+(off<0?'\u2212':'+')+Math.floor(a/60)+(a%60?':'+String(a%60).padStart(2,'0'):'')}
+const fmt=d=>{if(!d)return'—';let[h,mi]=tparts(d),m=String(mi).padStart(2,'0');
  if(S.fm==='24')return String(h).padStart(2,'0')+':'+m;const p=h<12?'AM':'PM';h=h%12||12;return h+':'+m+' '+p};
 const pt=(d,n)=>toDate(d,calc(d)[n]+(S.adj[n]||0)/60); // prayer n on day d, with the user's minute adjustments
 const lab=(n,d)=>n==='Dhuhr'&&d&&d.getDay()===5?'Jumu’ah':n;
 export const clk={hOff:0}; // 1 after Maghrib: the Islamic day has already turned over
 const eff=()=>addDays(new Date(),clk.hOff);
-export {calc,fmt,pt,eff,lab,fa,atan2,sin,cos};
+export {calc,fmt,pt,eff,lab,fa,atan2,sin,cos,tparts,cityDay,zoneTag};

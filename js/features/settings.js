@@ -14,14 +14,14 @@ function upd(){const a=parseFloat($('lat').value),b=parseFloat($('lng').value);
 $('city').innerHTML=CT.map(c=>`<option value="${c.n}">${c.n}</option>`).join('');
 function setCity(n){const el=$('city');n=n||'';if(n&&![...el.options].some(o=>o.value===n)){const o=document.createElement('option');o.value=n;o.textContent=n;el.insertBefore(o,el.firstChild)}el.value=n}
 $('city').addEventListener('change',()=>{const c=CT.find(x=>x.n.toLowerCase()===$('city').value.trim().toLowerCase());
- if(c){S.city=c.n;S.lat=c.a;S.lng=c.b;$('city').value=c.n;$('lat').value=c.a;$('lng').value=c.b;save();refresh()}});
+ if(c){S.city=c.n;S.lat=c.a;S.lng=c.b;S.tz=c.z;$('city').value=c.n;$('lat').value=c.a;$('lng').value=c.b;save();refresh()}});
 {const hav=(a,b,c,d)=>12742*Math.asin(Math.sqrt(sin((c-a)/2)**2+cos(a)*cos(c)*sin((d-b)/2)**2));
  if(!navigator.geolocation)$('loc').style.display='none';
  else $('loc').onclick=()=>{const st=$('locs');st.textContent='Locating…';tx();
   navigator.geolocation.getCurrentPosition(p=>{
    const a=+p.coords.latitude.toFixed(4),b=+p.coords.longitude.toFixed(4);let best=null,bd=1e9;
    CT.forEach(c=>{const d=hav(a,b,c.a,c.b);if(d<bd){bd=d;best=c}});
-   S.lat=a;S.lng=b;S.city=bd<=50?best.n:'My location';
+   S.lat=a;S.lng=b;S.city=bd<=50?best.n:'My location';S.tz=''; // you are here: device clock
    setCity(S.city);$('lat').value=a;$('lng').value=b;st.textContent='';save();refresh()},
   e=>{st.textContent=e.code===1?'Location permission was denied.':'Could not get your location.';tx()},
   {timeout:15000,maximumAge:60000})}}
