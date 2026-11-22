@@ -69,7 +69,7 @@ function render(){
   hot.next=nextDate?nextDate.getTime():0;
   const P={night:['#0c1a3c','#13265a','#22397a'],fajr:['#26256a','#3c3f8f','#6a6fc0'],morning:['#0b4a38','#127050','#1c8a64'],noon:['#0b5f7a','#12829a','#27a5b5'],asr:['#8a5a12','#b97a1c','#e0a63a'],sunset:['#7a2f1c','#b3472a','#e0803a']};
   const ph=!ds[0]||!ds[5]?'morning':now<ds[0]?'night':now<ds[1]?'fajr':now<ds[2]?'morning':now<ds[3]?'noon':now<ds[4]?'asr':now<ds[5]?'sunset':'night';
-  if(ph!==curPh){curPh=ph;const rs=document.documentElement.style;rs.setProperty('--h1',P[ph][0]);rs.setProperty('--hm',P[ph][1]);rs.setProperty('--h2',P[ph][2]);const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=P[ph][0]}}
+  if(ph!==curPh){curPh=ph;const rs=document.documentElement.style;rs.setProperty('--h1',P[ph][0]);rs.setProperty('--hm',P[ph][1]);rs.setProperty('--h2',P[ph][2])}}
  {const e=eff(),h=hp(e);
   put('hj',`${h.day} ${HM[h.month-1]} ${h.year} AH`,1);
   put('gr',ld(e,{weekday:'long',day:'numeric',month:'long',year:'numeric'}),1)}
