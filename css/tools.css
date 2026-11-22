@@ -1,0 +1,17 @@
+/* calendar */
+.g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.dn{font-size:.7rem;color:var(--mu);padding:4px 0}
+.d{padding:6px 0;border-radius:10px;line-height:1.1}.d small{display:block;font-size:.68rem;color:var(--mu)}
+.d.t{background:var(--ac);color:#fff}.d.t small{color:#fff}
+:root[data-theme="amethyst"] .d.t,:root[data-theme="amethyst"] .d.t small,:root[data-theme="amethyst"] .act,:root[data-theme="espresso"] .d.t,:root[data-theme="espresso"] .d.t small,:root[data-theme="espresso"] .act{color:#10131a!important}
+/* tables, settings, tools */
+table{border-collapse:collapse;width:100%;font-size:.78rem;font-variant-numeric:tabular-nums}
+th,td{padding:6px 4px;text-align:center;border-bottom:1px solid var(--ln);white-space:nowrap}
+th{color:var(--mu);font-weight:600}td:first-child{text-align:left;font-weight:600}td small{color:var(--mu);font-weight:400}
+#tt th:nth-child(3),#tt td:nth-child(3){color:var(--mu);font-weight:400}
+tr.td{background:var(--hl);color:var(--ac)}
+#adj,#iqa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#adj>div,#iqa>div{min-width:0}
+#adj label,#iqa label{margin:0 0 4px!important}
+.sg{display:flex;gap:6px}.sb{flex:none;width:40px;padding:0;font-size:1.2rem;font-weight:700;color:var(--ac)}
+#ago .row{flex-direction:column;gap:2px;padding:7px 8px}#ago .row span:first-child{color:var(--mu);font-size:.8rem}#ago .row span:last-child{font-weight:600}

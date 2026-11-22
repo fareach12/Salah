@@ -1,0 +1,41 @@
+/* hero */
+main>.card:first-child{background:linear-gradient(160deg,var(--h1),var(--hm));color:#fff;border:0;border-radius:26px 26px 0 0;margin-bottom:0;padding:18px 18px 8px;position:relative;box-shadow:none}
+main>.card:first-child::after{content:"\1F54C";position:absolute;right:12px;bottom:-6px;font-size:4.8rem;opacity:.16}
+.pill{display:inline-block;background:rgba(255,255,255,.16);padding:5px 12px;border-radius:999px;font-size:.85rem;margin-bottom:10px}
+.hijri{font-size:1.3rem;font-weight:700}
+.greg{color:rgba(255,255,255,.75);font-size:.9rem;margin-top:2px}
+main>.card:nth-child(2){background:linear-gradient(160deg,var(--hm),var(--h2));color:#fff;border:0;border-radius:0 0 26px 26px;padding:6px 18px 22px;position:relative;display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:start}
+main>.card:nth-child(2)>div:not([class]){display:contents}
+.next,.nn,.bigt{grid-column:1}
+.next{font-size:.8rem;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em}
+.nn{order:1;font-size:1.2rem;font-weight:700;color:#fff;opacity:.95}
+.bigt{order:2;font-size:2.8rem;font-weight:800;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}
+.ring{grid-column:2;grid-row:1/4;align-self:center;position:relative;width:104px;height:104px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rb,.rf{fill:none;stroke-width:7}.rb{stroke:rgba(255,255,255,.2)}.rf{stroke:#fff;stroke-linecap:round;transition:stroke-dasharray .9s linear}
+.rt{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.rt b{font-size:1.05rem;color:#fff;font-variant-numeric:tabular-nums}.rt small{font-size:.66rem;color:rgba(255,255,255,.75)}
+/* Today / Tomorrow switch and calendar-system switch */
+#dv,#agt{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px}
+#agt{margin-top:10px}
+#dv button,#agt button{border:0;background:transparent;border-radius:999px;padding:8px}
+#dv .act,#agt .act{background:var(--ac);color:#fff}
+/* prayer rows */
+.row{display:flex;justify-content:space-between;padding:10px 8px;border-radius:10px;font-size:1.05rem}
+.row.on{background:var(--hl);color:var(--ac);font-weight:700}.row.past{opacity:.45}.row span:last-child{font-variant-numeric:tabular-nums}
+#times{padding:6px 10px}
+#vol{padding:0}
+#times .row{align-items:center;justify-content:flex-start;border-radius:16px}
+#times .row span:first-of-type{flex:1;font-weight:600}
+#times .row>span:nth-of-type(2){font-weight:700}
+#times .row.on{box-shadow:inset 0 0 0 1.5px var(--ac)}
+.ic,.nic{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ic{width:38px;height:38px;padding:8px;border-radius:50%;background:var(--hl);color:var(--ac);flex:none;margin-inline-end:12px}
+.nic{width:26px;height:26px}
+/* Sunrise is not a prayer: its own gold-tinted row */
+#times .row.sr{margin:4px 10px;padding:9px 12px;font-size:1rem;font-weight:400;color:var(--tx);background:rgba(232,194,90,.14);border:1px dashed var(--ln);border-radius:14px;box-shadow:inset 3px 0 0 var(--gold)}
+#times .row.sr.past{opacity:.8}
+#times .row.sr span:first-of-type,#times .row.sr>span:nth-of-type(2){font-weight:500;letter-spacing:.02em}
+#times .row.sr .ic{background:rgba(232,194,90,.28);color:#b8860b}
+@media(prefers-color-scheme:dark){:root:not([data-theme]) #times .row.sr .ic{color:var(--gold)}}
+:root[data-theme="dark"] #times .row.sr .ic,:root[data-theme="midnight"] #times .row.sr .ic,:root[data-theme="amethyst"] #times .row.sr .ic,:root[data-theme="espresso"] #times .row.sr .ic,:root[data-theme="black"] #times .row.sr .ic{color:var(--gold)}
