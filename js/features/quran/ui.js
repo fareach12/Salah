@@ -4,7 +4,7 @@ import {Q,bestStreak,dAdd,juzDone,next,qsave,setQ,stats,streak,today,totals} fro
 import {H,J,abs,count,facts,fromAbs,idx,pageOf,pgw,rn,rng,validate} from './math.js';
 import {S} from '../../core/store.js';
 import {HM,hp} from '../../core/hijri.js';
-import {pad} from '../../core/dom.js';
+import {addDays,iso,pad} from '../../core/dom.js';
 import {ui} from '../../core/nav.js';
 import {on} from '../../core/bus.js';
 let view="home",cal=null,flash="",sel=null,logDate=null,anim=false;
@@ -72,24 +72,26 @@ function bindLog(){
  bindDel()}
 function bindDel(){root.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{Q.logs=Q.logs.filter(l=>l.id!==b.dataset.del);qsave();draw()})}
 
-function hmr(y,m,dim){const a=hp(new Date(y,m,1,12)),b=hp(new Date(y,m,dim,12));
- return a.month===b.month&&a.year===b.year?HM[a.month-1]+" "+a.year:HM[a.month-1]+(a.year!==b.year?" "+a.year:"")+" – "+HM[b.month-1]+" "+b.year}
-function calendar(){
- const y=cal.getFullYear(),m=cal.getMonth(),ym=y+"-"+pad(m+1),t=totals(),first=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),min=Q.set.min;
- if(!sel||sel.slice(0,7)!==ym)sel=today().slice(0,7)===ym?today():null;
- let h=["Sa","Su","Mo","Tu","We","Th","Fr"].map(d=>`<div class="qhd">${d}</div>`).join("")+"<div></div>".repeat((first+1)%7),days=0,tot=0;
- for(let d=1;d<=dim;d++){const k=ym+"-"+pad(d),n=t[k]||0;if(n>=min)days++;tot+=n;
+function gmr(a,b){const ma=ld(a,{month:"long",year:"numeric"}),mb=ld(b,{month:"long",year:"numeric"});if(ma===mb)return ma;
+ return a.getFullYear()===b.getFullYear()?ld(a,{month:"short"})+" – "+ld(b,{month:"short",year:"numeric"}):ld(a,{month:"short",year:"numeric"})+" – "+ld(b,{month:"short",year:"numeric"})}
+function calendar(){ // one Hijri month: it always starts at day 1
+ const h0=hp(cal),start=addDays(cal,-(h0.day-1)),ds=[];
+ for(let i=0;i<31;i++){const d=addDays(start,i),x=hp(d);if(x.month!==h0.month||x.year!==h0.year)break;ds.push(d)}
+ const t=totals(),min=Q.set.min,keys=ds.map(iso);
+ if(!sel||!keys.includes(sel))sel=keys.includes(today())?today():null;
+ let h=["Sa","Su","Mo","Tu","We","Th","Fr"].map(d=>`<div class="qhd">${d}</div>`).join("")+"<div></div>".repeat((ds[0].getDay()+1)%7),dr=0,tot=0;
+ ds.forEach((dt,i)=>{const k=keys[i],n=t[k]||0;if(n>=min)dr++;tot+=n;
   const c=n>=min*8?"l3":n>=min*3?"l2":n>=min?"l1":n?"some":"";
-  h+=`<button type="button" class="qd ${c}${k===today()?" today":""}${k===sel?" sel":""}" data-day="${k}" aria-label="${dl(k)}: ${n} ayahs"><span>${hj(k).day}</span><small class="qh">${d}</small>${n?`<small>${n}</small>`:""}</button>`}
+  h+=`<button type="button" class="qd ${c}${k===today()?" today":""}${k===sel?" sel":""}" data-day="${k}" aria-label="${dl(k)}: ${n} ayahs"><span>${i+1}</span><small class="qh">${dt.getDate()}</small>${n?`<small>${n}</small>`:""}</button>`});
  let det="";
  if(sel){const ls=Q.logs.filter(l=>l.date===sel).sort((x,y)=>x.at-y.at),pgs=new Set();
   ls.forEach(l=>{for(let p=pageOf(abs(l.s[0],l.s[1]));p<=pageOf(abs(l.e[0],l.e[1]));p++)pgs.add(p)});
   det=`<div class="card"><b>${dl(sel)}</b>${ls.length?`<div class="mu">${t[sel]} ayahs · ${pgs.size} ${pgs.size>1?"pages":"page"} touched</div>${ls.map(l=>entry(l,editable(sel))).join("")}`:'<p class="mu">Nothing logged on this day.</p>'}${editable(sel)?`<br><button type="button" class="sec" data-logday="${sel}">Log reading for this day</button>`:""}</div>`}
- return`<div class="qrow" style="margin-bottom:10px"><button class="sec" type="button" id="q_pm" aria-label="Previous month" style="flex:0 0 52px">‹</button><b style="text-align:center">${hmr(y,m,dim)}<br><span class="mu" style="font-weight:400">${ld(cal,{month:"long",year:"numeric"})}</span></b><button class="sec" type="button" id="q_nm" aria-label="Next month" style="flex:0 0 52px">›</button></div>
- <div class="card"><div class="qcal">${h}</div><div class="mu" style="margin-top:10px">${days} days read · ${tot} ayahs. Big number = Hijri day, small number = date. Darker boxes mean more ayahs. Tap a day for details.</div></div>${det}`}
+ return`<div class="qrow" style="margin-bottom:10px"><button class="sec" type="button" id="q_pm" aria-label="Previous month" style="flex:0 0 52px">‹</button><b style="text-align:center">${HM[h0.month-1]} ${h0.year}<br><span class="mu" style="font-weight:400">${gmr(ds[0],ds[ds.length-1])}</span></b><button class="sec" type="button" id="q_nm" aria-label="Next month" style="flex:0 0 52px">›</button></div>
+ <div class="card"><div class="qcal">${h}</div><div class="mu" style="margin-top:10px">${dr} ${dr===1?"day":"days"} read · ${tot} ayahs</div></div>${det}`}
 function bindCal(){
- qs("#q_pm").onclick=()=>{cal=new Date(cal.getFullYear(),cal.getMonth()-1,1);draw()};
- qs("#q_nm").onclick=()=>{cal=new Date(cal.getFullYear(),cal.getMonth()+1,1);draw()};
+ qs("#q_pm").onclick=()=>{cal=addDays(cal,-hp(cal).day);draw()}; // last day of the previous Hijri month
+ qs("#q_nm").onclick=()=>{cal=addDays(cal,31-hp(cal).day);draw()}; // first days of the next Hijri month
  root.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{sel=b.dataset.day;draw()});
  root.querySelectorAll("[data-logday]").forEach(b=>b.onclick=()=>{logDate=b.dataset.logday;go("log")});
  bindDel()}
