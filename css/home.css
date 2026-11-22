@@ -19,7 +19,7 @@ main>.card:nth-child(2)>div:not([class]){display:contents}
 #dv,#agt{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px}
 #agt{margin-top:10px}
 #dv button,#agt button{border:0;background:transparent;border-radius:999px;padding:8px}
-#dv .act,#agt .act{background:var(--ac);color:#fff}
+#dv .act,#agt .act{background:var(--ac);color:var(--on)}
 /* prayer rows */
 .row{display:flex;justify-content:space-between;padding:10px 8px;border-radius:10px;font-size:1.05rem}
 .row.on{background:var(--hl);color:var(--ac);font-weight:700}.row.past{opacity:.45}.row span:last-child{font-variant-numeric:tabular-nums}

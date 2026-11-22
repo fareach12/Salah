@@ -2,7 +2,7 @@
 #qr{--gd:#b8892b;--qar:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic","Al Nile",serif;margin-bottom:14px}
 .seg{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px;overflow-x:auto}
 #qr .seg button{width:auto;flex:1 0 auto;border:0;background:transparent;border-radius:999px;padding:8px 10px;font-size:.85rem;font-weight:400;color:var(--tx);white-space:nowrap}
-#qr .seg button.act{background:var(--ac);color:#fff;font-weight:600}
+#qr .seg button.act{background:var(--ac);color:var(--on);font-weight:600}
 #qr .big{font-size:2.6rem;font-weight:800;line-height:1.1;color:var(--ac);font-variant-numeric:tabular-nums}
 #qr .qrow{display:flex;gap:10px;align-items:center}#qr .qrow>*{flex:1}
 #qr .qrow>.card{min-width:0;padding:12px}
@@ -22,7 +22,7 @@
 #qr .qcal button.qd.some{border-color:var(--gd)}
 #qr .qcal button.qd.l1{background:var(--hl)}
 #qr .qcal button.qd.l2{background:color-mix(in srgb,var(--ac) 45%,var(--card));color:var(--tx)}
-#qr .qcal button.qd.l3{background:var(--ac);color:#fff;border-color:var(--ac)}
+#qr .qcal button.qd.l3{background:var(--ac);color:var(--on);border-color:var(--ac)}
 #qr .qcal button.qd.today{border:2px solid var(--gd)}
 #qr .qcal button.qd.sel{outline:2px solid var(--tx);outline-offset:-3px}
 #qr .bar{height:8px;background:var(--ln);border-radius:6px;overflow:hidden;margin:8px 0}

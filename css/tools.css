@@ -2,7 +2,7 @@
 .g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
 .dn{font-size:.7rem;color:var(--mu);padding:4px 0}
 .d{padding:6px 0;border-radius:10px;line-height:1.1}.d small{display:block;font-size:.68rem;color:var(--mu)}
-.d.t{background:var(--ac);color:#fff}.d.t small{color:#fff}
+.d.t{background:var(--ac);color:var(--on)}.d.t small{color:var(--on)}
 :root[data-theme="amethyst"] .d.t,:root[data-theme="amethyst"] .d.t small,:root[data-theme="amethyst"] .act,:root[data-theme="espresso"] .d.t,:root[data-theme="espresso"] .d.t small,:root[data-theme="espresso"] .act{color:#10131a!important}
 /* tables, settings, tools */
 table{border-collapse:collapse;width:100%;font-size:.78rem;font-variant-numeric:tabular-nums}
