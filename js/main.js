@@ -3,6 +3,7 @@ import {applyLg} from './core/i18n.js';
 import {refresh} from './core/render.js';
 import {showTab} from './core/nav.js';
 import {hot} from './features/home.js';
+import {watchUpdates} from './core/update.js';
 import './core/nav.js';
 import './features/home.js';import './features/timetable.js';import './features/qibla.js';import './features/calendar.js';
 import './features/reminders.js';import './features/adhan.js';import './features/age.js';import './features/quran/index.js';
@@ -24,4 +25,4 @@ function tick(){const n=Date.now(),k=Math.floor(n/6e4);
  const t=Date.now();let d=6e4-t%6e4;if(hot.next>t)d=Math.min(d,hot.next-t);
  setTimeout(tick,Math.max(20,d+15))}
 tick();
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+watchUpdates();
