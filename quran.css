@@ -1,0 +1,44 @@
+/* Quran */
+#qr{--gd:#b8892b;--qar:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic","Al Nile",serif;margin-bottom:14px}
+#qr h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:18px;margin:22px 0 10px}
+#qr .big{font:600 72px/1 Georgia,serif;color:var(--ac)}
+#qr .qrow{display:flex;gap:10px;align-items:center}#qr .qrow>*{flex:1}
+#qr .qrow>.card{min-width:0;padding:12px}
+#qr .mut{color:var(--mu);font-size:.85rem}#qr .gd{color:var(--gd);font-weight:600}
+#qr button{width:100%;background:var(--ac);color:#fff;border:0;font-weight:600;transition:background-color .15s,transform .1s,border-color .15s}
+#qr button:active{transform:scale(.98)}
+#qr button.sec{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+#qr button.x{width:auto;padding:4px 10px;background:transparent;color:var(--mu);border:1px solid var(--ln);font-weight:400;flex:none;margin-top:2px}
+#qr .f{gap:6px}
+#qr .f button{background:var(--bg);color:var(--tx);border:1px solid var(--ln);font-weight:400;padding:9px 2px;font-size:.82rem;white-space:nowrap}
+#qr .f button.act{background:var(--ac);color:#fff;border-color:var(--ac)}
+#qr textarea{width:100%;height:110px;font:inherit;font-size:16px;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:10px}
+#qr select{text-overflow:ellipsis}
+#qr :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+#qr .qcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+#qr .qcal .qhd{text-align:center;color:var(--mu);font-size:.75rem;padding:2px 0}
+#qr .qcal button.qd{width:100%;min-width:0;aspect-ratio:1/1.1;padding:2px 0;border-radius:12px;background:var(--bg);color:var(--tx);border:1px solid var(--ln);font-weight:500;font-size:.95rem;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+#qr .qcal button.qd:active{transform:scale(.93)}
+#qr .qcal button.qd small{font-size:.62rem;font-weight:700;opacity:.85}
+#qr .qcal button.qd small.qh{font-weight:400;opacity:.65}
+#qr .qcal button.qd.some{border-color:var(--gd)}
+#qr .qcal button.qd.l1{background:var(--hl)}
+#qr .qcal button.qd.l2{background:color-mix(in srgb,var(--ac) 45%,var(--card));color:var(--tx)}
+#qr .qcal button.qd.l3{background:var(--ac);color:#fff;border-color:var(--ac)}
+#qr .qcal button.qd.today{border:2px solid var(--gd)}
+#qr .qcal button.qd.sel{outline:2px solid var(--tx);outline-offset:-3px}
+#qr .bar{height:8px;background:var(--ln);border-radius:6px;overflow:hidden;margin:8px 0}
+#qr .bar i{display:block;height:100%;background:var(--ac);animation:qgrow .6s ease-out}
+#qr .jg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-bottom:6px}
+#qr .jg div{border:1px solid var(--ln);border-radius:10px;padding:6px 0;text-align:center;line-height:1.15;color:var(--tx)}
+#qr .jg div.dk{color:#fff}#qr .jg small{display:block;font-size:.62rem;opacity:.85}
+#qr .ar{font-family:var(--qar);font-size:1.8rem;line-height:1.6;direction:rtl;text-align:center;color:var(--ac)}
+:root[lang="ar"] #qr,:root[lang="ar"] #qr h2,:root[lang="ar"] #qr .big{font-family:var(--qar)}
+#qr .li{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln);gap:8px}
+#qr .li>span{min-width:0;overflow-wrap:anywhere}
+#qr .err{color:#c0392b;font-size:.85rem;min-height:20px}
+#qr table{width:100%;border-collapse:collapse;font-size:.9rem}#qr td,#qr th{padding:6px 4px;border-bottom:1px solid var(--ln);text-align:left}#qr tr.cur{background:var(--hl)}
+@keyframes qin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes qgrow{from{width:0}}
+#qr .qv.in{animation:qin .24s ease-out}
+@media(prefers-reduced-motion:reduce){#qr *{animation:none!important;transition:none!important}}
