@@ -29,7 +29,7 @@ const CK={};let ckSig='';
 function calc(date){const sig=S.lat+','+S.lng+','+S.me+','+S.as+','+(S.ha||0);
  if(sig!==ckSig||Object.keys(CK).length>120){ckSig=sig;for(const k in CK)delete CK[k]}
  const k=date.getFullYear()*372+date.getMonth()*31+date.getDate();return CK[k]||(CK[k]=calc0(date))}
-const toDate=(base,h)=>isNaN(h)?null:new Date(base.getFullYear(),base.getMonth(),base.getDate(),0,0,Math.round(h*3600));
+const toDate=(base,h)=>isNaN(h)?null:new Date(base.getFullYear(),base.getMonth(),base.getDate(),0,Math.floor(h*60+1e-6),0);
 const fmt=d=>{if(!d)return'—';let h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');
  if(S.fm==='24')return String(h).padStart(2,'0')+':'+m;const p=h<12?'AM':'PM';h=h%12||12;return h+':'+m+' '+p};
 const pt=(d,n)=>toDate(d,calc(d)[n]+(S.adj[n]||0)/60); // prayer n on day d, with the user's minute adjustments

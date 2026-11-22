@@ -1,4 +1,4 @@
-import {$} from '../core/dom.js';
+import {$,addDays} from '../core/dom.js';
 import {lab,pt} from '../core/prayer.js';
 import {S,save} from '../core/store.js';
 import {tx} from '../core/i18n.js';
@@ -44,10 +44,10 @@ au.onpause=()=>{if(!quiet){idle();sync()}};
 au.onended=()=>{idle();hide()};
 // Phones only allow sound after a tap: the first tap anywhere in the app "unlocks" the audio element silently.
 function unlock(){if(!au.paused||quiet)return;quiet=true;au.src=SILENT;
- au.play().then(()=>{if(quiet){au.pause();quiet=false;removeEventListener('click',unlock)}}).catch(()=>{quiet=false})}
+ au.play().then(()=>{if(quiet){au.pause();quiet=false;removeEventListener('click',unlock);load().then(u=>{if(u&&au.paused&&au.src!==u){au.src=u;au.load()}})}}).catch(()=>{quiet=false})}
 addEventListener('click',unlock);
-async function fire(n,d){banner(n,d);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}
- if(!await play(n,d)){sync();try{if(window.Notification&&Notification.permission==='granted')navigator.serviceWorker.ready.then(g=>g.showNotification('Salah',{body:'Time for '+lab(n,d),icon:'icon-192.png',tag:'adhan-'+n}))}catch(e){}}}
+async function fire(n,d){const ok=play(n,d);banner(n,d);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}
+ if(!await ok){sync();try{if(window.Notification&&Notification.permission==='granted')navigator.serviceWorker.ready.then(g=>g.showNotification('Salah',{body:'Time for '+lab(n,d),icon:'icon-192.png',tag:'adhan-'+n}))}catch(e){}}}
 // Once per prayer per day, and only within 90 s of the time: an adhan that is minutes late is not played.
 function chk(){const now=new Date(),dk=now.toDateString();
  for(const k in S.af)if(S.af[k]!==dk)delete S.af[k];
@@ -65,5 +65,10 @@ $('adf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)re
  if(!(f.type||'').startsWith('audio/')&&!/\.(mp3|m4a|aac|ogg|oga|opus|wav)$/i.test(f.name)){say('That is not an audio file.');return}
  try{await dbPut(f);S.adf=f.name.slice(0,60);save();ready=null;stop();idle()}catch(x){say('Could not save the sound on this device.')}};
 $('adr').onclick=async()=>{try{await dbDel()}catch(x){}S.adf='';save();ready=null;stop();idle()};
-paint();idle();on('render',chk);
+// Own timer: wakes right at the next adhan time (also while the page is in the background), so it never waits for the screen refresh.
+let tm=0;
+function arm(){clearTimeout(tm);const now=new Date();let w=3e4;
+ PR.forEach(n=>{if(!S.ad[n])return;[0,1].forEach(o=>{const p=pt(addDays(now,o),n);if(p&&p>now)w=Math.min(w,p-now)})});
+ tm=setTimeout(()=>{chk();arm()},Math.max(20,w+15))}
+paint();idle();on('render',()=>{chk();arm()});arm();
 if(PR.some(n=>S.ad[n]))load(); // ready before the first prayer time
