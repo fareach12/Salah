@@ -1,5 +1,5 @@
 // Bump VERSION on every release: old caches are deleted on activate.
-const VERSION='salah-v2';
+const VERSION='salah-v3';
 const SHELL=[
   "./css/base.css",
   "./css/home.css",
