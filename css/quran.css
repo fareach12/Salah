@@ -39,3 +39,6 @@
 @keyframes qgrow{from{width:0}}
 #qr .qv.in{animation:qin .24s ease-out}
 @media(prefers-reduced-motion:reduce){#qr *{animation:none!important;transition:none!important}}
+/* Quran tab bar: centered, equal-width tabs that fit any screen */
+#qr .seg{justify-content:center;overflow:visible}
+#qr .seg button{flex:1 1 0;min-width:0;padding:8px 2px;text-align:center;font-size:.8rem;overflow:hidden;text-overflow:ellipsis}
