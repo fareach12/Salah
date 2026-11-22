@@ -1,7 +1,7 @@
 /* Quran: built from the same pieces as the rest of the app (cards, summary sections, the Today/Tomorrow-style switch, normal buttons and fonts) */
-#qr{--gd:#b8892b;--qar:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic","Al Nile",serif;margin-bottom:14px}
-.seg{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px;overflow-x:auto}
-#qr .seg button{width:auto;flex:1 0 auto;border:0;background:transparent;border-radius:999px;padding:8px 10px;font-size:.85rem;font-weight:400;color:var(--tx);white-space:nowrap}
+#qr{--gd:#b8892b;--qar:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic","Al Nile",serif;margin:0 auto 14px;max-width:640px}
+.seg{background:var(--card);border:1px solid var(--ln);border-radius:999px;padding:4px;gap:4px;overflow-x:auto;justify-content:center;scrollbar-width:none}.seg::-webkit-scrollbar{display:none}
+#qr .seg button{width:auto;flex:1 1 auto;min-width:0;text-align:center;border:0;background:transparent;border-radius:999px;padding:8px 6px;font-size:.85rem;font-weight:400;color:var(--tx);white-space:nowrap}
 #qr .seg button.act{background:var(--ac);color:var(--on);font-weight:600}
 #qr .big{font-size:2.6rem;font-weight:800;line-height:1.1;color:var(--ac);font-variant-numeric:tabular-nums}
 #qr .qrow{display:flex;gap:10px;align-items:center}#qr .qrow>*{flex:1}
@@ -39,6 +39,10 @@
 @keyframes qgrow{from{width:0}}
 #qr .qv.in{animation:qin .24s ease-out}
 @media(prefers-reduced-motion:reduce){#qr *{animation:none!important;transition:none!important}}
+
 /* Quran tab bar: centered, equal-width tabs that fit any screen */
 #qr .seg{justify-content:center;overflow:visible}
 #qr .seg button{flex:1 1 0;min-width:0;padding:8px 2px;text-align:center;font-size:.8rem;overflow:hidden;text-overflow:ellipsis}
+
+/* Quran page: always one centered column (same width as Settings/Qibla), never stuck in the left grid column */
+@media(min-width:700px){main>#qr{grid-column:1/-1;justify-self:center;width:100%;max-width:640px;margin-left:auto;margin-right:auto}}
