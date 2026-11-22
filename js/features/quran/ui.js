@@ -7,9 +7,10 @@ import {HM,hp} from '../../core/hijri.js';
 import {addDays,iso,pad} from '../../core/dom.js';
 import {ui} from '../../core/nav.js';
 import {on} from '../../core/bus.js';
-let view="home",cal=null,flash="",sel=null,logDate=null,anim=false;
+const QV=["home","log","calendar","ref","settings"];let view="home";try{const v=sessionStorage.getItem("qv");if(QV.includes(v))view=v}catch(e){}
+let cal=null,flash="",sel=null,logDate=null,anim=false;
 const root=document.getElementById("qr");const qs=s=>root.querySelector(s);
-function go(v){const ch=v!==view;view=v;anim=ch;draw();if(ch)scrollTo(0,0)}
+function go(v){const ch=v!==view;view=v;try{sessionStorage.setItem("qv",v)}catch(e){}anim=ch;draw();if(ch)scrollTo(0,0)}
 const pos=(s,a)=>N[s-1]+" "+s+":"+a;
 const opts=sel=>N.map((n,i)=>`<option value="${i+1}"${i+1===sel?" selected":""}>${i+1}. ${n} — ${AR[i]}</option>`).join("");
 function draw(){

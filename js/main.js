@@ -6,7 +6,16 @@ import {hot} from './features/home.js';
 import './core/nav.js';
 import './features/home.js';import './features/timetable.js';import './features/qibla.js';import './features/calendar.js';
 import './features/reminders.js';import './features/adhan.js';import './features/age.js';import './features/quran/index.js';
-fillForm();applyLg();refresh();showTab('home');
+fillForm();applyLg();refresh();
+{ // a refresh keeps you on the same page (tab, Quran sub-page and scroll position)
+ let t='home',y=0;try{t=sessionStorage.getItem('tab')||'home';y=+sessionStorage.getItem('sy')||0}catch(e){}
+ if(!document.querySelector('#nav button[data-t="'+t+'"]'))t='home';
+ showTab(t);
+ if(y>0){let go=1;const stop=()=>{go=0};addEventListener('touchstart',stop,{once:true,passive:true});addEventListener('wheel',stop,{once:true,passive:true});
+  [0,150,450].forEach(d=>setTimeout(()=>{if(go)scrollTo(0,y)},d))}
+ const sv=()=>{try{sessionStorage.setItem('sy',Math.round(scrollY))}catch(e){}};
+ addEventListener('pagehide',sv);document.addEventListener('visibilitychange',()=>{if(document.hidden)sv()});
+}
 let lastK=Math.floor(Date.now()/6e4);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){lastK=Math.floor(Date.now()/6e4);refresh()}});
 // Wake exactly at the next minute change or the next prayer time (no 1-second polling lag).
