@@ -5,7 +5,7 @@ import {showTab} from './core/nav.js';
 import {hot} from './features/home.js';
 import './core/nav.js';
 import './features/home.js';import './features/timetable.js';import './features/qibla.js';import './features/calendar.js';
-import './features/reminders.js';import './features/age.js';import './features/quran/index.js';
+import './features/reminders.js';import './features/adhan.js';import './features/age.js';import './features/quran/index.js';
 fillForm();applyLg();refresh();showTab('home');
 let lastK=Math.floor(Date.now()/6e4);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){lastK=Math.floor(Date.now()/6e4);refresh()}});

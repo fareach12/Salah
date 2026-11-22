@@ -7,6 +7,6 @@ const M={MWL:[18,17],ISNA:[15,15],Egypt:[19.5,17.5],Makkah:[18.5,'90'],Karachi:[
 const THEMES=['auto','light','sand','dark','midnight','amethyst','espresso','black'];
 if(!M[S.me])S.me='MWL';
 if(!THEMES.includes(S.th))S.th='auto';
-S.adj=S.adj||{};S.iq=S.iq||{Fajr:20,Dhuhr:15,Asr:15,Maghrib:5,Isha:15};S.rem=S.rem||[];S.rf=S.rf||{};
+S.adj=S.adj||{};S.iq=S.iq||{Fajr:20,Dhuhr:15,Asr:15,Maghrib:5,Isha:15};S.rem=S.rem||[];S.rf=S.rf||{};S.ad=S.ad||{};S.af=S.af||{};S.adf=S.adf||'';
 try{const o=localStorage.getItem(QK);if(o){if(!S.q)S.q=JSON.parse(o);localStorage.setItem('pt',JSON.stringify(S));localStorage.removeItem(QK)}}catch(e){}
 export {S,save,M,THEMES};

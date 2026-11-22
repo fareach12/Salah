@@ -15,3 +15,6 @@ tr.td{background:var(--hl);color:var(--ac)}
 #adj label,#iqa label{margin:0 0 4px!important}
 .sg{display:flex;gap:6px}.sb{flex:none;width:40px;padding:0;font-size:1.2rem;font-weight:700;color:var(--ac)}
 #ago .row{flex-direction:column;gap:2px;padding:7px 8px}#ago .row span:first-child{color:var(--mu);font-size:.8rem}#ago .row span:last-child{font-weight:600}
+/* adhan */
+#adn{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#adn button{padding:10px 6px}

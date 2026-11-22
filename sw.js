@@ -1,5 +1,5 @@
 // Bump VERSION on every release: old caches are deleted on activate.
-const VERSION='salah-v3';
+const VERSION='salah-v4';
 const SHELL=[
   "./css/base.css",
   "./css/home.css",
@@ -17,6 +17,7 @@ const SHELL=[
   "./js/core/render.js",
   "./js/core/store.js",
   "./js/data/cities.js",
+  "./js/features/adhan.js",
   "./js/features/age.js",
   "./js/features/calendar.js",
   "./js/features/home.js",
@@ -31,13 +32,14 @@ const SHELL=[
   "./js/features/timetable.js",
   "./js/main.js",
   "./manifest.json",
-  "./icon-192.png"
+  "./icon-192.png",
+  "./audio/adhan.mp3"
 ];
 self.addEventListener('install',e=>{
-  // addAll is atomic; the optional files are added one by one so a missing icon never blocks install
+  // addAll is atomic; the optional files are added one by one so a missing icon or adhan file never blocks install
   e.waitUntil(caches.open(VERSION).then(async c=>{
-    await c.addAll(SHELL.filter(u=>!/manifest|icon-/.test(u)));
-    await Promise.all(SHELL.filter(u=>/manifest|icon-/.test(u)).map(u=>c.add(u).catch(()=>{})));
+    await c.addAll(SHELL.filter(u=>!/manifest|icon-|audio\//.test(u)));
+    await Promise.all(SHELL.filter(u=>/manifest|icon-|audio\//.test(u)).map(u=>c.add(u).catch(()=>{})));
   }).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',e=>{

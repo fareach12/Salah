@@ -100,6 +100,17 @@
   <label>Iqama: minutes after adhan (0 = hide)</label>
   <div id="iqa"></div>
  </details>
+<details class="card" open data-tab="tools"><summary>Adhan</summary>
+ <div class="mu">Plays the adhan at prayer time while the app is open or was used recently. With the app fully closed you need the native app.</div>
+ <label>Play at prayer time</label>
+ <div id="adn"></div>
+ <label>Sound</label>
+ <div class="f"><button id="adt" type="button">Test</button><button id="adx" type="button">Stop</button></div>
+ <button id="adc" type="button" style="margin-top:8px;width:100%">Choose adhan sound</button>
+ <button id="adr" type="button" style="margin-top:8px;width:100%;display:none">Use default sound</button>
+ <input id="adf" type="file" accept="audio/*" hidden>
+ <div id="ads" class="mu"></div>
+</details>
 <details class="card" open data-tab="tools"><summary>Reminders</summary>
  <div class="mu">Alerts show while the app is open or was used recently. Alerts with the app fully closed need the native app.</div>
  <label>Minutes · before or after · prayer</label><div class="f"><input id="rm" type="number" min="0" max="180" value="15" inputmode="numeric" style="width:70px"><select id="rd"><option value="-1">before</option><option value="1">after</option></select><select id="rp"><option value="Fajr">Fajr</option><option value="Sunrise">Sunrise</option><option value="Dhuhr">Dhuhr / Jumu’ah</option><option value="Asr">Asr</option><option value="Maghrib">Maghrib</option><option value="Isha">Isha</option></select></div>
