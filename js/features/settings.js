@@ -33,7 +33,10 @@ $('adj').addEventListener('click',e=>{const b=e.target.closest('.sb');if(!b)retu
 $('adj').addEventListener('change',e=>{if(e.target.tagName==='INPUT')upA(e.target.dataset.n)});
 $('lg').value=S.lg||'en';
 $('lg').addEventListener('change',()=>{S.lg=$('lg').value;save();applyLg();emit('lang');refresh()});
-const applyTh=()=>{if(S.th&&S.th!=='auto')document.documentElement.dataset.theme=S.th;else delete document.documentElement.dataset.theme};
+// The phone's status bar and the Android bar (home/back) take the colour of the bottom menu, so they follow every theme.
+const syncBar=()=>{const c=getComputedStyle(document.documentElement).getPropertyValue('--card').trim();if(c)document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.content=c)};
+const applyTh=()=>{if(S.th&&S.th!=='auto')document.documentElement.dataset.theme=S.th;else delete document.documentElement.dataset.theme;syncBar()};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',syncBar);
 $('th').value=S.th;applyTh();$('th').addEventListener('change',()=>{S.th=$('th').value;save();applyTh()});
 $('ha').addEventListener('change',()=>{S.ha=+$('ha').value;save();emit('hijri');refresh()});
 export {fillForm};
